@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────
+   Kidora brand theme — calm, fresh, trustworthy (0–3 yrs)
+   Blue-green palette drawn from the Kidora logo
+   (teal #3AA6A0 → blue #2F7FB5, deep navy #234A5C).
+   Tailwind v4 token config. Tokens become utilities, e.g.
+   bg-cream, text-ink, text-coral, font-display, etc.
+   Note: token names are kept for a surgical re-theme — the
+   "coral" accent is now the brand blue.
+   ───────────────────────────────────────────────────────── */
+@theme {
+  --color-cream: #f6fbfb;
+  --color-sand: #e4f1f1;
+  --color-ink: #234a5c;
+  --color-muted: #5e7c88;
+
+  --color-coral: #2f7fb5;
+  --color-coral-soft: #d6e9f5;
+  --color-teal: #3aa6a0;
+  --color-teal-soft: #d6efec;
+  --color-sunny: #f0b338;
+  --color-sky: #5aa9d6;
+
+  --font-display: var(--font-fredoka);
+  --font-body: var(--font-nunito);
+
+  --radius-blob: 2rem;
+}
+
+:root {
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Lenis smooth-scroll recommended base styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Respect users who prefer reduced motion: kill all animation */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Soft blobby background helper */
+.bg-blob {
+  background-image:
+    radial-gradient(40rem 40rem at 80% -10%, var(--color-coral-soft), transparent 60%),
+    radial-gradient(40rem 40rem at -10% 30%, var(--color-teal-soft), transparent 55%);
+}
+
+/* ── Tiny kid that scampers across the nav (limb cycling) ── */
+@keyframes kidora-run-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.5px); }
+}
+@keyframes kidora-run-legA {
+  0%, 100% { transform: rotate(36deg); }
+  50% { transform: rotate(-32deg); }
+}
+@keyframes kidora-run-legB {
+  0%, 100% { transform: rotate(-32deg); }
+  50% { transform: rotate(36deg); }
+}
+@keyframes kidora-run-armA {
+  0%, 100% { transform: rotate(-36deg); }
+  50% { transform: rotate(32deg); }
+}
+@keyframes kidora-run-armB {
+  0%, 100% { transform: rotate(32deg); }
+  50% { transform: rotate(-36deg); }
+}
+.kidora-runner .bob { animation: kidora-run-bob 0.32s ease-in-out infinite; }
+.kidora-runner .leg-a { transform-origin: 13px 16px; animation: kidora-run-legA 0.32s linear infinite; }
+.kidora-runner .leg-b { transform-origin: 13px 16px; animation: kidora-run-legB 0.32s linear infinite; }
+.kidora-runner .arm-a { transform-origin: 15px 10px; animation: kidora-run-armA 0.32s linear infinite; }
+.kidora-runner .arm-b { transform-origin: 15px 10px; animation: kidora-run-armB 0.32s linear infinite; }

@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx --yes create-next-app@latest . --ts --tailwind --app --eslint --src-dir --import-alias \"@/*\" --use-npm --no-git --yes)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(node -e \"console.log\\(require\\('./package.json'\\).dependencies.next, require\\('./package.json'\\).version\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(npx tsc *)",
+      "Bash(cd \"c:/Users/kahve/OneDrive/Desktop/kidora\" && cp src/components/growth-journey/GrowthJourney.tsx /tmp/GJ.bak.tsx && echo backed up)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/schedule)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/services)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/about)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/login)",
+      "Bash(curl -s -X POST http://localhost:3000/api/leads -H \"Content-Type: application/json\" -d '{\"name\":\"Test Parent\",\"email\":\"t@e.com\",\"preferred\":\"Sat AM\"}' -w \" [%{http_code}]\\\\n\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/leads -H \"Content-Type: application/json\" -d '{\"name\":\"\"}' -w \" [%{http_code}]\\\\n\")",
+      "Read(//c/Users/kahve/Downloads/kidora_logos/**)",
+      "Read(//c/Users/kahve/Downloads/**)",
+      "Bash(echo \"=== TSC exit $? ===\")",
+      "Bash(npx eslint *)",
+      "Bash(echo \"=== ESLINT exit $? ===\")",
+      "Bash(echo \"=== TSC $? ===\")",
+      "Bash(echo \"=== ESLINT $? ===\")"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  }
+}
