@@ -1,305 +1,203 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { STAGES } from "./stages";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function GrowthJourney() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const photoRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const uiRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
+const FRAME_COUNT = 96;
+const FRAME_W = 960;
+const FRAME_H = 540;
+const frameSrc = (i: number) => `/frames/frame_${String(i + 1).padStart(3, "0")}.jpg`;
 
-  const [active, setActive] = useState(0);
-  const [reduced, setReduced] = useState(false);
+const RM_QUERY = "(prefers-reduced-motion: reduce)";
+
+function useReducedMotion() {
+  return useSyncExternalStore(
+    (onChange) => {
+      const m = window.matchMedia(RM_QUERY);
+      m.addEventListener("change", onChange);
+      return () => m.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia(RM_QUERY).matches,
+    () => false,
+  );
+}
+
+function HeroCopy() {
+  return (
+    <div className="max-w-2xl">
+      <span className="inline-flex items-center gap-2 rounded-full bg-cream/15 px-4 py-1.5 text-sm font-bold text-cream ring-1 ring-cream/25 backdrop-blur-sm">
+        Erken çocukluk gelişimi · 0–3 yaş
+      </span>
+      <h1 className="mt-5 font-display text-4xl font-semibold leading-tight text-cream sm:text-6xl">
+        Büyümelerini,
+        <br />
+        <span className="text-sky">her adımda</span> izleyin.
+      </h1>
+      <p className="mx-auto mt-5 max-w-md text-lg text-cream/85">
+        İlk günlerden ilk koşulara — çocuğunuzun gelişimini uzman ve oyun
+        temelli bakımla destekliyoruz.
+      </p>
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <Link
+          href="/schedule"
+          className="rounded-full bg-coral px-7 py-3.5 font-bold text-cream shadow-lg transition-transform hover:-translate-y-0.5"
+        >
+          Randevu al
+        </Link>
+        <Link
+          href="/services"
+          className="rounded-full border-2 border-cream/30 bg-cream/10 px-7 py-3.5 font-bold text-cream backdrop-blur-sm transition-colors hover:border-cream"
+        >
+          Hizmetlerimiz
+        </Link>
+      </div>
+      <p className="mt-10 animate-pulse text-sm font-semibold uppercase tracking-widest text-cream/70">
+        Aşağı kaydır ↓
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Landing hero: scroll-scrubbed cinematic sequence. The clip (frame rising +
+ * child growing newborn→toddler) is pre-extracted to a frame sequence and drawn
+ * to a <canvas> by scroll progress (Apple-style) — no video seeking, so it's
+ * smooth. Pinned (sticky) while scrubbing. Reduced-motion → static poster.
+ */
+export default function LandingHero() {
+  const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const currentRef = useRef(-1);
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      setReduced(true);
-      return;
+    if (reduced) return;
+    const canvas = canvasRef.current;
+    const section = sectionRef.current;
+    if (!canvas || !section) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const images: HTMLImageElement[] = [];
+
+    function paint(index: number, force = false) {
+      if (!force && index === currentRef.current) return;
+      const img = images[index];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+      currentRef.current = index;
+      const cw = canvas!.width;
+      const ch = canvas!.height;
+      ctx!.clearRect(0, 0, cw, ch);
+      // "contain" fit — the whole frame stays visible as it rises.
+      const scale = Math.min(cw / FRAME_W, ch / FRAME_H);
+      const dw = FRAME_W * scale;
+      const dh = FRAME_H * scale;
+      ctx!.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     }
 
-    // On mobile, the browser's address bar collapsing/expanding fires a resize
-    // that would make ScrollTrigger recalculate mid-scroll and jump. Ignore it
-    // so the pinned growth journey scrubs smoothly on touch devices.
-    ScrollTrigger.config({ ignoreMobileResize: true });
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas!.getBoundingClientRect();
+      canvas!.width = Math.round(rect.width * dpr);
+      canvas!.height = Math.round(rect.height * dpr);
+      paint(currentRef.current < 0 ? 0 : currentRef.current, true);
+    }
 
-    const n = STAGES.length;
+    let loaded = 0;
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      const img = new Image();
+      img.src = frameSrc(i);
+      img.onload = () => {
+        loaded++;
+        if (i === 0) paint(0, true);
+        if (loaded === FRAME_COUNT) ScrollTrigger.refresh();
+      };
+      images.push(img);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
 
     const st = ScrollTrigger.create({
-      trigger: sectionRef.current,
+      trigger: section,
       start: "top top",
       end: "bottom bottom",
-      scrub: 1,
+      scrub: 0.7,
       onUpdate: (self) => {
-        // f goes 0 → (n-1) across the whole pinned scroll.
-        const f = self.progress * (n - 1);
-
-        // A-under / B-over cross-fade: the current photo stays fully opaque
-        // underneath while the next one fades in on top. This avoids the
-        // mid-transition "dip" where both are semi-transparent and the
-        // background bleeds through (the cause of the choppiness).
-        const base = Math.min(STAGES.length - 1, Math.floor(f));
-        const frac = f - base;
-        photoRefs.current.forEach((el, i) => {
-          if (!el) return;
-          let opacity = 0;
-          let z = 1;
-          if (i < base) {
-            opacity = 1; // already-passed frames stay solid below
-          } else if (i === base) {
-            opacity = 1;
-            z = 2;
-          } else if (i === base + 1) {
-            opacity = frac; // incoming frame fades in on top
-            z = 3;
-          }
-          el.style.opacity = String(opacity);
-          el.style.zIndex = String(z);
-          // Gentle, continuous grow tied to overall progress (no per-frame jump).
-          el.style.transform = `scale(${1.06 - 0.06 * self.progress})`;
-        });
-
-        // Hero (brand intro) fades out over the first frame transition;
-        // the growth UI (milestones, timeline, progress) fades in to replace it.
-        const heroOpacity = Math.max(0, Math.min(1, 1 - f / 0.85));
-        if (heroRef.current) {
-          heroRef.current.style.opacity = String(heroOpacity);
-          heroRef.current.style.pointerEvents = heroOpacity < 0.1 ? "none" : "auto";
+        const idx = Math.min(
+          FRAME_COUNT - 1,
+          Math.round(self.progress * (FRAME_COUNT - 1)),
+        );
+        paint(idx);
+        const content = contentRef.current;
+        if (content) {
+          // Copy is fully readable at the start, gone by ~35% so the growth plays clean.
+          const o = Math.max(0, 1 - self.progress / 0.35);
+          content.style.opacity = String(o);
+          content.style.pointerEvents = o < 0.1 ? "none" : "auto";
         }
-        if (uiRef.current) uiRef.current.style.opacity = String(1 - heroOpacity);
-
-        if (barRef.current) barRef.current.style.width = `${self.progress * 100}%`;
-
-        const idx = Math.round(f);
-        setActive((prev) => (prev === idx ? prev : idx));
       },
     });
 
-    return () => st.kill();
-  }, []);
+    return () => {
+      window.removeEventListener("resize", resize);
+      st.kill();
+    };
+  }, [reduced]);
 
-  // ── Reduced-motion fallback: hero + a clean static gallery, no pinning ──
+  // ── Reduced-motion: static poster hero, no pin/scrub ──
   if (reduced) {
     return (
-      <section id="journey" className="bg-sand pb-20 pt-28 sm:pt-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <Hero />
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {STAGES.map((s) => (
-              <figure key={s.id} className="rounded-blob bg-cream p-2.5 shadow-sm ring-1 ring-ink/10">
-                <div className="relative aspect-square overflow-hidden rounded-[1.4rem]">
-                  <Image src={s.src} alt={`${s.age} çocuk`} fill className="object-cover" sizes="(max-width:1024px) 50vw, 33vw" />
-                  <div
-                    className="pointer-events-none absolute inset-0 mix-blend-soft-light"
-                    style={{
-                      background:
-                        "linear-gradient(160deg, color-mix(in srgb, var(--color-teal) 55%, transparent), color-mix(in srgb, var(--color-coral) 45%, transparent))",
-                      opacity: 0.4,
-                    }}
-                  />
-                </div>
-                <figcaption className="px-3 pb-3 pt-4">
-                  <span className="text-sm font-bold" style={{ color: s.accent }}>{s.age}</span>
-                  <h2 className="font-display text-xl font-semibold text-ink">{s.title}</h2>
-                  <p className="mt-1 text-sm text-muted">{s.note}</p>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+      <section id="journey" className="relative h-[100svh] min-h-[34rem] overflow-hidden bg-ink">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url(/hero-poster.jpg)" }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-black/35" />
+        <div className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center [text-shadow:0_2px_22px_rgba(0,0,0,0.6)]">
+          <HeroCopy />
         </div>
       </section>
     );
   }
 
   return (
-    <section
-      ref={sectionRef}
-      id="journey"
-      className="relative bg-sand"
-      style={{ height: `${STAGES.length * 100}vh` }}
-    >
-      {/* Pinned stage */}
-      <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden bg-blob bg-sand px-5">
-        {/* Centered photo frame — a "matte print" card. Capped well below the
-            1024px source so the browser always DOWNSCALES (crisp), and the
-            cream mat + brand grade make the cool studio gray cohere with the
-            brand palette so the photo never looks pasted on. */}
-        <div className="relative aspect-square w-[min(82vw,56vh,28rem)] rounded-[2rem] bg-cream p-2.5 shadow-[0_30px_80px_-20px_rgba(35,74,92,0.35)] ring-1 ring-ink/10 sm:p-3">
-          {/* Brand gradient hairline on the card edge */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-[2rem]"
-            style={{
-              padding: 1,
-              background:
-                "linear-gradient(135deg, color-mix(in srgb, var(--color-teal) 38%, transparent), color-mix(in srgb, var(--color-coral) 38%, transparent))",
-              WebkitMask:
-                "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-              WebkitMaskComposite: "xor",
-              maskComposite: "exclude",
-            }}
-          />
-          {/* Inner clipped print: photos + grade + vignette */}
-          <div className="relative h-full w-full overflow-hidden rounded-[1.5rem]">
-            {STAGES.map((s, i) => (
-              <div
-                key={s.id}
-                ref={(el) => {
-                  photoRefs.current[i] = el;
-                }}
-                className="absolute inset-0 will-change-[opacity]"
-                style={{ opacity: i === 0 ? 1 : 0 }}
-              >
-                <Image
-                  src={s.src}
-                  alt={`${s.age} çocuk`}
-                  fill
-                  priority={i <= 1}
-                  sizes="(max-width: 640px) 82vw, 28rem"
-                  className="object-cover"
-                />
-              </div>
-            ))}
-            {/* Brand grade: nudges the dull studio gray into the brand family.
-                soft-light keeps skin believable; tune opacity if skin tints. */}
-            <div
-              className="pointer-events-none absolute inset-0 mix-blend-soft-light"
-              style={{
-                background:
-                  "linear-gradient(160deg, color-mix(in srgb, var(--color-teal) 55%, transparent), color-mix(in srgb, var(--color-coral) 45%, transparent))",
-                opacity: 0.4,
-              }}
-            />
-            {/* Subtle inner vignette so the print edges feel soft */}
-            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_60px_rgba(35,74,92,0.12)]" />
-          </div>
-        </div>
-
-        {/* ── Growth UI (milestones + timeline + progress); fades in ── */}
-        <div ref={uiRef} className="mt-6 w-full max-w-2xl text-center opacity-0">
-          <div className="relative mx-auto h-36 sm:h-32">
-            {STAGES.map((s, i) => (
-              <div
-                key={s.id}
-                className="absolute inset-x-0 transition-all duration-500"
-                style={{
-                  opacity: active === i ? 1 : 0,
-                  transform: `translateY(${active === i ? 0 : 10}px)`,
-                }}
-                aria-hidden={active !== i}
-              >
-                <span
-                  className="inline-block rounded-full px-3 py-1 text-sm font-bold"
-                  style={{ backgroundColor: s.accent, color: "var(--color-ink)" }}
-                >
-                  {s.age}
-                </span>
-                <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
-                  {s.title}
-                </h2>
-                <p className="mx-auto mt-1.5 max-w-md text-sm text-muted sm:text-base">
-                  {s.note}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Timeline dots */}
-          <div className="mt-3 flex items-center justify-center gap-3">
-            {STAGES.map((s, i) => (
-              <span
-                key={s.id}
-                className="h-2.5 rounded-full transition-all duration-300"
-                style={{
-                  width: active === i ? 28 : 10,
-                  backgroundColor: active === i ? s.accent : "rgba(52,50,74,0.18)",
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Progress bar */}
-          <div className="mx-auto mt-4 h-1.5 w-[min(90%,28rem)] overflow-hidden rounded-full bg-ink/10">
-            <div ref={barRef} className="h-full w-0 rounded-full bg-coral" />
-          </div>
-        </div>
-
-        {/* ── Hero (brand intro); covers the stage, then fades to reveal it ── */}
+    // Section height = scroll distance the growth sequence plays over (tune here).
+    <section ref={sectionRef} id="journey" className="relative" style={{ height: "300vh" }}>
+      <div className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
+        {/* Blurred poster fills the letterbox so the contained frame has no hard bars */}
         <div
-          ref={heroRef}
-          className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-blob bg-sand px-5 text-center"
+          aria-hidden
+          className="absolute inset-0 scale-110 bg-cover bg-center blur-2xl brightness-90"
+          style={{ backgroundImage: "url(/hero-poster.jpg)" }}
+        />
+        {/* The scrubbed growth sequence */}
+        <canvas ref={canvasRef} aria-hidden className="absolute inset-0 h-full w-full" />
+
+        {/* Legibility grade — darker behind the centred copy, airy at the edges */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(85% 65% at 50% 46%, rgba(8,14,20,0.6) 0%, rgba(8,14,20,0.16) 55%, transparent 80%)",
+          }}
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/45 to-transparent" />
+
+        {/* Hero copy — fades out as the growth sequence plays */}
+        <div
+          ref={contentRef}
+          className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center [text-shadow:0_2px_22px_rgba(0,0,0,0.65)]"
         >
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-coral-soft px-4 py-1.5 text-sm font-bold text-coral">
-              Erken çocukluk gelişimi · 0–3 yaş
-            </span>
-            <h1 className="mt-5 font-display text-4xl font-semibold leading-tight text-ink sm:text-6xl">
-              Büyümelerini,
-              <br />
-              <span className="text-coral">her adımda</span> izleyin.
-            </h1>
-            <p className="mx-auto mt-5 max-w-md text-lg text-muted">
-              İlk günlerden ilk koşulara — çocuğunuzun gelişimini uzman ve oyun
-              temelli bakımla destekliyoruz.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link
-                href="/schedule"
-                className="rounded-full bg-coral px-7 py-3.5 font-bold text-cream shadow-md transition-transform hover:-translate-y-0.5"
-              >
-                Randevu al
-              </Link>
-              <Link
-                href="/services"
-                className="rounded-full border-2 border-ink/10 bg-cream px-7 py-3.5 font-bold text-ink transition-colors hover:border-coral"
-              >
-                Hizmetlerimiz
-              </Link>
-            </div>
-            <p className="mt-10 animate-pulse text-sm font-semibold uppercase tracking-widest text-ink/60">
-              Büyümek için kaydır ↓
-            </p>
-          </div>
+          <HeroCopy />
         </div>
       </div>
     </section>
-  );
-}
-
-function Hero() {
-  return (
-    <div className="mx-auto max-w-2xl text-center">
-      <span className="inline-flex items-center gap-2 rounded-full bg-coral-soft px-4 py-1.5 text-sm font-bold text-coral">
-        Erken çocukluk gelişimi · 0–3 yaş
-      </span>
-      <h1 className="mt-5 font-display text-4xl font-semibold leading-tight text-ink sm:text-6xl">
-        Büyümelerini, <span className="text-coral">her adımda</span> izleyin.
-      </h1>
-      <p className="mx-auto mt-5 max-w-md text-lg text-muted">
-        İlk günlerden ilk koşulara — çocuğunuzun gelişimini uzman ve oyun temelli
-        bakımla destekliyoruz.
-      </p>
-      <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Link
-          href="/schedule"
-          className="rounded-full bg-coral px-7 py-3.5 font-bold text-cream shadow-md transition-transform hover:-translate-y-0.5"
-        >
-          Randevu al
-        </Link>
-        <Link
-          href="/services"
-          className="rounded-full border-2 border-ink/10 bg-cream px-7 py-3.5 font-bold text-ink transition-colors hover:border-coral"
-        >
-          Hizmetlerimiz
-        </Link>
-      </div>
-    </div>
   );
 }

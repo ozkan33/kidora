@@ -27,10 +27,10 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md transition-all duration-300 ${
         scrolled
-          ? "bg-cream/85 shadow-[0_2px_20px_rgba(52,50,74,0.06)] backdrop-blur-md"
-          : "bg-transparent"
+          ? "bg-cream/90 shadow-[0_2px_20px_rgba(52,50,74,0.08)]"
+          : "bg-cream/75"
       }`}
     >
       <nav
