@@ -14,7 +14,7 @@ const VALUES = [
   },
   {
     title: "Bilime dayalı",
-    body: "Programlarımız güncel erken çocukluk araştırmalarından ve kanıtlanmış gelişim yaklaşımlarından beslenir.",
+    body: "Programlarımız güncel erken çocukluk araştırmalarından ve kanıta dayalı gelişim yaklaşımlarından beslenir.",
   },
   {
     title: "Aile ortağı",

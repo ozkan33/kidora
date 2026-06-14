@@ -11,7 +11,7 @@ const SERVICES = [
   {
     emoji: "🍼",
     title: "Bebek bakımı (0–12 ay)",
-    body: "Sıcak ve duyarlı birebir bakım. Güvenli bağlanmayı ve erken iletişimi geliştiren duyusal oyunlar, yüzüstü zaman ve nazik rutinler.",
+    body: "Sıcak ve duyarlı birebir bakım. Güvenli bağlanmayı ve erken iletişimi geliştiren duyusal oyunlar, yüzüstü pozisyon ve sakin rutinler.",
     points: ["Güvenli bağlanma", "Duyusal & motor oyun", "Beslenme & uyku desteği"],
   },
   {
@@ -23,7 +23,7 @@ const SERVICES = [
   {
     emoji: "📋",
     title: "Gelişim takibi",
-    body: "Çocuğunuzun nasıl geliştiğini ve sırada ne olduğunu her zaman anlamanız için bilimsel araçlarla yapılan nazik, düzenli gelişim değerlendirmeleri.",
+    body: "Çocuğunuzun nasıl geliştiğini ve sırada ne olduğunu her zaman anlamanız için gelişim tarama araçlarıyla yapılan sakin, düzenli gelişim değerlendirmeleri.",
     points: ["Gelişim takibi", "Erken destek", "Ebeveyn raporları"],
   },
   {
@@ -47,7 +47,7 @@ export default function ServicesPage() {
           </h1>
           <p className="mt-3 text-lg text-muted">
             Her program çocuğunuzun bugün bulunduğu noktaya uyum sağlar — ve onu
-            sıradaki adıma nazikçe hazırlar.
+            sıradaki adıma şefkatle hazırlar.
           </p>
         </div>
 

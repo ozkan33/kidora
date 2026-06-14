@@ -1,26 +1,28 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────
-   Kidora brand theme — calm, fresh, trustworthy (0–3 yrs)
-   Blue-green palette drawn from the Kidora logo
-   (teal #3AA6A0 → blue #2F7FB5, deep navy #234A5C).
+   Kidora brand theme — warm, soft, friendly.
+   Salmon + navy palette drawn from the updated Kidora logo
+   (salmon #E89A9B, navy #3B4765) on warm cream.
    Tailwind v4 token config. Tokens become utilities, e.g.
    bg-cream, text-ink, text-coral, font-display, etc.
-   Note: token names are kept for a surgical re-theme — the
-   "coral" accent is now the brand blue.
+   Note: token names are kept for a surgical re-theme:
+   - "coral" = primary rose (deep enough for white-text buttons)
+   - "sky"   = light salmon accent (for dark surfaces)
+   - "teal"  = navy (no green in the new brand)
    ───────────────────────────────────────────────────────── */
 @theme {
-  --color-cream: #f6fbfb;
-  --color-sand: #e4f1f1;
-  --color-ink: #234a5c;
-  --color-muted: #5e7c88;
+  --color-cream: #fbf7f3;
+  --color-sand: #f4e9e4;
+  --color-ink: #34405e;
+  --color-muted: #5c6480;
 
-  --color-coral: #2f7fb5;
-  --color-coral-soft: #d6e9f5;
-  --color-teal: #3aa6a0;
-  --color-teal-soft: #d6efec;
-  --color-sunny: #f0b338;
-  --color-sky: #5aa9d6;
+  --color-coral: #b85056;
+  --color-coral-soft: #f4d9d7;
+  --color-teal: #3b4765;
+  --color-teal-soft: #e7eaf1;
+  --color-sunny: #e7b59c;
+  --color-sky: #e89a9b;
 
   --font-display: var(--font-fredoka);
   --font-body: var(--font-nunito);
@@ -106,3 +108,42 @@ html.lenis body {
 .kidora-runner .leg-b { transform-origin: 13px 16px; animation: kidora-run-legB 0.32s linear infinite; }
 .kidora-runner .arm-a { transform-origin: 15px 10px; animation: kidora-run-armA 0.32s linear infinite; }
 .kidora-runner .arm-b { transform-origin: 15px 10px; animation: kidora-run-armB 0.32s linear infinite; }
+
+/* ── Focus: branded visible ring (outline follows radius; forced-colors safe) ── */
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-coral) 65%, transparent);
+  outline-offset: 2px;
+}
+
+/* ── Entrance + scroll reveals (opacity + transform only) ── */
+@keyframes kidora-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* One-time staggered hero entrance on load */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-rise > * {
+    opacity: 0;
+    animation: kidora-rise 0.6s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+  .hero-rise > *:nth-child(1) { animation-delay: 0.10s; }
+  .hero-rise > *:nth-child(2) { animation-delay: 0.20s; }
+  .hero-rise > *:nth-child(3) { animation-delay: 0.30s; }
+  .hero-rise > *:nth-child(4) { animation-delay: 0.40s; }
+  .hero-rise > *:nth-child(5) { animation-delay: 0.55s; }
+}
+
+/* Scroll-driven section reveals — pure CSS, progressive enhancement.
+   Browsers without scroll-driven animation (or reduced-motion users) just see
+   the content normally; no JS, so nothing can be hidden if scripts fail. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      opacity: 0;
+      animation: kidora-rise 1s linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+}

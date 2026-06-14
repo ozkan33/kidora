@@ -8,9 +8,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const FRAME_COUNT = 96;
-const FRAME_W = 960;
-const FRAME_H = 540;
-const frameSrc = (i: number) => `/frames/frame_${String(i + 1).padStart(3, "0")}.jpg`;
+const FRAME_W = 1280;
+const FRAME_H = 720;
+// Full-res frames for desktop; a downscaled set (~1/3 the bytes) for phones.
+const frameName = (i: number) => `frame_${String(i + 1).padStart(3, "0")}.jpg`;
+const frameSrc = (i: number, small: boolean) =>
+  `/${small ? "frames-sm" : "frames"}/${frameName(i)}`;
 
 const RM_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -28,7 +31,7 @@ function useReducedMotion() {
 
 function HeroCopy() {
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl hero-rise">
       <span className="inline-flex items-center gap-2 rounded-full bg-cream/15 px-4 py-1.5 text-sm font-bold text-cream ring-1 ring-cream/25 backdrop-blur-sm">
         Erken çocukluk gelişimi · 0–3 yaş
       </span>
@@ -38,8 +41,8 @@ function HeroCopy() {
         <span className="text-sky">her adımda</span> izleyin.
       </h1>
       <p className="mx-auto mt-5 max-w-md text-lg text-cream/85">
-        İlk günlerden ilk koşulara — çocuğunuzun gelişimini uzman ve oyun
-        temelli bakımla destekliyoruz.
+        İlk günlerden ilk koşulara — çocuğunuzun gelişimini oyun temelli ve
+        uzman bir bakımla destekliyoruz.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Link
@@ -84,6 +87,8 @@ export default function LandingHero() {
     if (!ctx) return;
 
     const images: HTMLImageElement[] = [];
+    // Phones get the lighter frame set so the hero isn't a ~7MB download on data.
+    const small = window.matchMedia("(max-width: 768px)").matches;
 
     function paint(index: number, force = false) {
       if (!force && index === currentRef.current) return;
@@ -93,8 +98,13 @@ export default function LandingHero() {
       const cw = canvas!.width;
       const ch = canvas!.height;
       ctx!.clearRect(0, 0, cw, ch);
-      // "contain" fit — the whole frame stays visible as it rises.
-      const scale = Math.min(cw / FRAME_W, ch / FRAME_H);
+      // Landscape/desktop: "contain" so the whole frame stays visible as it rises.
+      // Portrait (viewport narrower than the 16:9 frame): "cover" so the child
+      // fills the screen instead of shrinking to a tiny letterboxed strip.
+      const cover = cw / ch < FRAME_W / FRAME_H;
+      const scale = cover
+        ? Math.max(cw / FRAME_W, ch / FRAME_H)
+        : Math.min(cw / FRAME_W, ch / FRAME_H);
       const dw = FRAME_W * scale;
       const dh = FRAME_H * scale;
       ctx!.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
@@ -103,15 +113,20 @@ export default function LandingHero() {
     function resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const rect = canvas!.getBoundingClientRect();
-      canvas!.width = Math.round(rect.width * dpr);
-      canvas!.height = Math.round(rect.height * dpr);
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+      // Skip no-op resizes (e.g. iOS URL-bar show/hide) so we don't clear and
+      // re-rasterize the canvas mid-scrub.
+      if (w === canvas!.width && h === canvas!.height) return;
+      canvas!.width = w;
+      canvas!.height = h;
       paint(currentRef.current < 0 ? 0 : currentRef.current, true);
     }
 
     let loaded = 0;
     for (let i = 0; i < FRAME_COUNT; i++) {
       const img = new Image();
-      img.src = frameSrc(i);
+      img.src = frameSrc(i, small);
       img.onload = () => {
         loaded++;
         if (i === 0) paint(0, true);
@@ -168,17 +183,23 @@ export default function LandingHero() {
   }
 
   return (
-    // Section height = scroll distance the growth sequence plays over (tune here).
-    <section ref={sectionRef} id="journey" className="relative" style={{ height: "300vh" }}>
+    // Section height = scroll distance the growth sequence plays over. Shorter on
+    // mobile so the hero clears in fewer thumb-scrolls; full length on desktop.
+    <section ref={sectionRef} id="journey" className="relative h-[220vh] md:h-[300vh]">
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
         {/* Blurred poster fills the letterbox so the contained frame has no hard bars */}
         <div
           aria-hidden
-          className="absolute inset-0 scale-110 bg-cover bg-center blur-2xl brightness-90"
+          className="absolute inset-0 scale-110 bg-cover bg-center blur-2xl brightness-105 saturate-[1.1]"
           style={{ backgroundImage: "url(/hero-poster.jpg)" }}
         />
-        {/* The scrubbed growth sequence */}
-        <canvas ref={canvasRef} aria-hidden className="absolute inset-0 h-full w-full" />
+        {/* The scrubbed growth sequence — brightened + crisper for a well-lit, airy look */}
+        <canvas
+          ref={canvasRef}
+          aria-hidden
+          className="absolute inset-0 h-full w-full"
+          style={{ filter: "brightness(1.07) contrast(1.05) saturate(1.08)" }}
+        />
 
         {/* Legibility grade — darker behind the centred copy, airy at the edges */}
         <div
@@ -188,7 +209,7 @@ export default function LandingHero() {
               "radial-gradient(85% 65% at 50% 46%, rgba(8,14,20,0.6) 0%, rgba(8,14,20,0.16) 55%, transparent 80%)",
           }}
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/45 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/35 to-transparent" />
 
         {/* Hero copy — fades out as the growth sequence plays */}
         <div

@@ -5,7 +5,7 @@ import LeadForm from "@/components/LeadForm";
 export const metadata: Metadata = {
   title: "Randevu al",
   description:
-    "Kidora'ya randevu alın veya randevusuz ziyaret için zaman talep edin. Ailenize uygun bir saat bulmanıza yardımcı oluyoruz.",
+    "Kidora'ya randevu alın veya size uygun bir zaman talep edin. Ailenize uygun bir saat bulmanıza yardımcı oluyoruz.",
 };
 
 export default function SchedulePage() {
@@ -20,16 +20,16 @@ export default function SchedulePage() {
             Randevunuzu oluşturun
           </h1>
           <p className="mt-3 text-lg text-muted">
-            Aşağıdan size uygun bir saat seçin — ya da randevusuz gelmeyi
-            tercih ederseniz bilgilerinizi bırakın, sizi biz programlayalım.
+            Aşağıdan size uygun bir saat seçin — ya da bilgilerinizi bırakın,
+            size uygun bir zaman için sizinle iletişime geçelim.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-5">
+        <div className="mt-12 grid gap-8 lg:grid-cols-2">
           {/* Cal.com booking */}
-          <div className="lg:col-span-3">
+          <div>
             <h2 className="font-display text-2xl font-semibold text-ink">
-              Online randevu
+              Çevrimiçi randevu
             </h2>
             <p className="mt-1 text-sm text-muted">
               Bir tarih ve saat seçin — anında onay alırsınız.
@@ -40,14 +40,14 @@ export default function SchedulePage() {
           </div>
 
           {/* Walk-in request */}
-          <div className="lg:col-span-2">
+          <div>
             <div className="rounded-blob bg-sand p-6 sm:p-8">
               <h2 className="font-display text-2xl font-semibold text-ink">
                 Randevusuz mu geleceksiniz?
               </h2>
               <p className="mt-1 text-sm text-muted">
-                Bilgilerinizi ve tercih ettiğiniz zamanı bırakın. Randevusuz
-                ziyaret saatinizi onaylayıp sizinle iletişime geçelim.
+                Bilgilerinizi ve tercih ettiğiniz zamanı bırakın. Ziyaret
+                saatinizi onaylayıp sizinle iletişime geçelim.
               </p>
               <div className="mt-6">
                 <LeadForm />

@@ -76,7 +76,7 @@ export default function Nav() {
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
             <path
               d={open ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"}
-              stroke="#34324a"
+              stroke="#34405e"
               strokeWidth="2.2"
               strokeLinecap="round"
             />

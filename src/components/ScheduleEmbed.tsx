@@ -15,13 +15,13 @@ export default function ScheduleEmbed() {
     return (
       <div className="rounded-blob border-2 border-dashed border-coral/40 bg-coral-soft/40 p-8 text-center">
         <p className="font-display text-lg font-semibold text-ink">
-          Online randevu yakında hazır
+          Çevrimiçi randevu yakında hazır
         </p>
         <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
           Canlı randevu seçimini etkinleştirmek için ortam değişkenine{" "}
           <code className="rounded bg-cream px-1.5 py-0.5">NEXT_PUBLIC_CALCOM_LINK</code>{" "}
           değerini (örn. <code className="rounded bg-cream px-1.5 py-0.5">kidora/visit</code>)
-          ekleyin. Bu sırada aşağıdaki randevusuz ziyaret formunu kullanabilirsiniz —
+          ekleyin. Bu sırada aşağıdaki randevu talep formunu kullanabilirsiniz —
           onaylamak için sizinle iletişime geçeceğiz.
         </p>
       </div>
