@@ -98,13 +98,11 @@ export default function LandingHero() {
       const cw = canvas!.width;
       const ch = canvas!.height;
       ctx!.clearRect(0, 0, cw, ch);
-      // Landscape/desktop: "contain" so the whole frame stays visible as it rises.
-      // Portrait (viewport narrower than the 16:9 frame): "cover" so the child
-      // fills the screen instead of shrinking to a tiny letterboxed strip.
-      const cover = cw / ch < FRAME_W / FRAME_H;
-      const scale = cover
-        ? Math.max(cw / FRAME_W, ch / FRAME_H)
-        : Math.min(cw / FRAME_W, ch / FRAME_H);
+      // Always "contain" so the whole 16:9 frame stays visible. On portrait this
+      // means a centred band with the blurred poster filling the letterbox — we
+      // must not "cover"/crop, because the subject drifts across the frame as the
+      // sequence plays and a side-crop would slide it off-screen.
+      const scale = Math.min(cw / FRAME_W, ch / FRAME_H);
       const dw = FRAME_W * scale;
       const dh = FRAME_H * scale;
       ctx!.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);

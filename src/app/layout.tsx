@@ -46,16 +46,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // While the maintenance gate is on, every route renders the "coming soon"
+  // page (see middleware.ts), so the nav/footer would only point at hidden
+  // pages — drop the site chrome and render the page on its own.
+  const maintenance = process.env.MAINTENANCE_MODE === "on";
+
   return (
     <html lang="tr">
       <body
         className={`${fredoka.variable} ${nunito.variable} bg-cream text-ink antialiased`}
       >
-        <SmoothScroll>
-          <Nav />
+        {maintenance ? (
           <main>{children}</main>
-          <Footer />
-        </SmoothScroll>
+        ) : (
+          <SmoothScroll>
+            <Nav />
+            <main>{children}</main>
+            <Footer />
+          </SmoothScroll>
+        )}
       </body>
     </html>
   );
