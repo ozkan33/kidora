@@ -4,7 +4,8 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Hizmetler",
   description:
-    "Kidora'nın 0–3 yaş için oyun temelli programları: bebek bakımı, çocuk programları, gelişim takibi ve ebeveyn danışmanlığı.",
+    "Erdemli, Mersin'de Kidora'nın 0–3 yaş için oyun temelli programları: bebek bakımı, çocuk programları, gelişim takibi ve ebeveyn danışmanlığı.",
+  alternates: { canonical: "/services" },
 };
 
 const SERVICES = [

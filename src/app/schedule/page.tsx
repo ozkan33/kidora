@@ -5,7 +5,8 @@ import LeadForm from "@/components/LeadForm";
 export const metadata: Metadata = {
   title: "Randevu al",
   description:
-    "Kidora'ya randevu alın veya size uygun bir zaman talep edin. Ailenize uygun bir saat bulmanıza yardımcı oluyoruz.",
+    "Erdemli, Mersin'deki Kidora'ya randevu alın veya size uygun bir zaman talep edin. Ailenize uygun bir saat bulmanıza yardımcı oluyoruz.",
+  alternates: { canonical: "/schedule" },
 };
 
 export default function SchedulePage() {

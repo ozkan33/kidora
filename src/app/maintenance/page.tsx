@@ -21,9 +21,9 @@ export default function MaintenancePage() {
       <section className="relative mx-auto flex min-h-[100svh] max-w-3xl flex-col items-center justify-center gap-7 px-6 py-16 text-center">
         <Image
           src="/kidora-lockup-light.png"
-          alt="Kidora — Aile Danışma Merkezi"
-          width={1380}
-          height={603}
+          alt="Kidora — Özel Aile Danışma Merkezi"
+          width={1600}
+          height={536}
           priority
           className="h-20 w-auto sm:h-24"
         />

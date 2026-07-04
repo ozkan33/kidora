@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/ui/Nav";
 import Footer from "@/components/ui/Footer";
+import { SITE_URL, organizationJsonLd } from "@/lib/seo";
 
 const fredoka = Fredoka({
   variable: "--font-fredoka",
@@ -18,26 +19,30 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kidora.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Kidora — Erken Çocukluk Gelişimi, 0–3 Yaş",
+    default: "Kidora — Erdemli'de Erken Çocukluk Gelişimi, 0–3 Yaş",
     template: "%s · Kidora",
   },
   description:
-    "Kidora, çocuğunuzun ilk günlerinden ilk koşusuna kadar gelişimini destekler. 0–3 yaş için interaktif, uzman rehberliğinde erken çocukluk bakımı. Hemen randevu alın.",
+    "Erdemli, Mersin'de 0–3 yaş için oyun temelli erken çocukluk gelişimi ve aile danışmanlığı. Erdemli ve çevresindeki ailelere uzman rehberliği. Hemen randevu alın.",
   keywords: [
-    "çocuk gelişimi",
-    "erken çocukluk",
-    "0-3 yaş",
-    "bebek gelişimi",
-    "çocuk gelişim basamakları",
+    "çocuk gelişimi Erdemli",
+    "Erdemli aile danışma merkezi",
+    "0-3 yaş gelişim Erdemli",
+    "bebek gelişimi Mersin",
+    "erken çocukluk Erdemli",
+    "çocuk gelişim merkezi Mersin",
   ],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Kidora — Erken Çocukluk Gelişimi, 0–3 Yaş",
+    title: "Kidora — Erdemli'de Erken Çocukluk Gelişimi, 0–3 Yaş",
     description:
-      "İlk günlerden ilk koşulara — 0–3 yaş için interaktif, uzman rehberliğinde gelişim.",
+      "Erdemli, Mersin'de 0–3 yaş için oyun temelli, uzman rehberliğinde erken çocukluk gelişimi.",
     type: "website",
     siteName: "Kidora",
+    locale: "tr_TR",
+    url: SITE_URL,
   },
 };
 
@@ -63,6 +68,13 @@ export default function RootLayout({
             <Nav />
             <main>{children}</main>
             <Footer />
+            {/* Local-business + WebSite structured data (Erdemli, Mersin) */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(organizationJsonLd()),
+              }}
+            />
           </SmoothScroll>
         )}
       </body>

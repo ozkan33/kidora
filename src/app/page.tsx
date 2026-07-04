@@ -1,5 +1,6 @@
 import Link from "next/link";
 import GrowthJourney from "@/components/growth-journey/GrowthJourney";
+import { SERVICE_AREAS, LOCAL_FAQ, faqJsonLd } from "@/lib/seo";
 
 const SERVICES = [
   {
@@ -161,6 +162,57 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* ───────────── Service area + local FAQ (Erdemli, Mersin) ───────────── */}
+      <section id="bolge" className="bg-sand py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div>
+              <span className="font-display text-sm font-bold uppercase tracking-widest text-teal">
+                Hizmet bölgemiz
+              </span>
+              <h2 className="mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">
+                Erdemli ve çevresindeki ailelerin yanındayız
+              </h2>
+              <p className="mt-3 text-muted">
+                Erdemli, Mersin merkezliyiz; çevredeki yaklaşık 40 km&apos;lik
+                bölgedeki ailelere 0–3 yaş erken çocukluk gelişimi ve aile
+                danışmanlığı sunuyoruz.
+              </p>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {SERVICE_AREAS.map((area) => (
+                  <li
+                    key={area}
+                    className="rounded-full bg-cream px-4 py-1.5 text-sm font-medium text-ink ring-1 ring-ink/5"
+                  >
+                    {area}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-display text-xl font-semibold text-ink">
+                Sıkça sorulan sorular
+              </h3>
+              <dl className="mt-5 divide-y divide-ink/10">
+                {LOCAL_FAQ.map(({ q, a }) => (
+                  <div key={q} className="py-4">
+                    <dt className="font-semibold text-ink">{q}</dt>
+                    <dd className="mt-1.5 text-sm leading-relaxed text-muted">
+                      {a}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </div>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd()) }}
+        />
       </section>
 
       {/* ───────────── Closing CTA ───────────── */}
