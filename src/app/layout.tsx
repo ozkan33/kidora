@@ -4,7 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/ui/Nav";
 import Footer from "@/components/ui/Footer";
-import { SITE_URL, organizationJsonLd } from "@/lib/seo";
+import { SITE_URL, ogBase, organizationJsonLd } from "@/lib/seo";
 
 const fredoka = Fredoka({
   variable: "--font-fredoka",
@@ -21,29 +21,40 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Kidora — Erdemli'de Erken Çocukluk Gelişimi, 0–3 Yaş",
+    default: "Kidora — Erdemli, Mersin | Çocuk Atölyesi ve Aile Danışma Merkezi",
     template: "%s · Kidora",
   },
   description:
-    "Erdemli, Mersin'de 0–3 yaş için oyun temelli erken çocukluk gelişimi ve aile danışmanlığı. Erdemli ve çevresindeki ailelere uzman rehberliği. Hemen randevu alın.",
+    "Erdemli, Mersin'de aile danışma merkezi ve çocuk atölyesi. 0–3 yaş oyun temelli gelişim, duyusal oyun, gelişimsel değerlendirme, dikkat testi ve hafta sonu etkinlikleri.",
   keywords: [
     "çocuk gelişimi Erdemli",
     "Erdemli aile danışma merkezi",
+    "Mersin aile danışmanlık merkezi",
     "0-3 yaş gelişim Erdemli",
     "bebek gelişimi Mersin",
     "erken çocukluk Erdemli",
     "çocuk gelişim merkezi Mersin",
+    "çocuk atölyesi Mersin",
+    "duyusal oyun",
+    "eğitici oyun",
+    "dikkat testi Mersin",
+    "gelişimsel değerlendirme",
+    "çocuk yogası Mersin",
+    "drama atölyesi Mersin",
+    "psikodrama",
+    "robotik kodlama Mersin",
+    "İngilizce oyun grubu Mersin",
+    "resim atölyesi Mersin",
+    "Mersin hafta sonu çocuk etkinlikleri",
   ],
-  alternates: { canonical: "/" },
   openGraph: {
-    title: "Kidora — Erdemli'de Erken Çocukluk Gelişimi, 0–3 Yaş",
+    ...ogBase,
+    title: "Kidora — Erdemli, Mersin | Çocuk Atölyesi ve Aile Danışma Merkezi",
     description:
-      "Erdemli, Mersin'de 0–3 yaş için oyun temelli, uzman rehberliğinde erken çocukluk gelişimi.",
-    type: "website",
-    siteName: "Kidora",
-    locale: "tr_TR",
+      "Erdemli, Mersin'de aile danışma merkezi ve çocuk atölyesi: 0–3 yaş oyun temelli gelişim, duyusal oyun, atölyeler ve hafta sonu etkinlikleri.",
     url: SITE_URL,
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { business } from "@/lib/seo";
+import { absoluteUrl, business, ogBase } from "@/lib/seo";
 import AddressLink from "@/components/ui/AddressLink";
+
+const DESCRIPTION =
+  "Kidora, Erdemli, Mersin'de 0–3 yaş için sıcaklığı bilimsel erken çocukluk uzmanlığıyla birleştiren bir çocuk gelişimi ve aile danışma merkezidir.";
 
 export const metadata: Metadata = {
   title: "Hakkımızda",
-  description:
-    "Kidora, Erdemli, Mersin'de 0–3 yaş için sıcaklığı bilimsel erken çocukluk uzmanlığıyla birleştiren bir çocuk gelişimi ve aile danışma merkezidir.",
+  description: DESCRIPTION,
   alternates: { canonical: "/about" },
+  openGraph: {
+    ...ogBase,
+    title: "Hakkımızda · Kidora",
+    description: DESCRIPTION,
+    url: absoluteUrl("/about"),
+  },
 };
 
 const VALUES = [

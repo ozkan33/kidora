@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import GrowthJourney from "@/components/growth-journey/GrowthJourney";
 import { SERVICE_AREAS, LOCAL_FAQ, faqJsonLd } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const SERVICES = [
   {
@@ -75,6 +80,35 @@ export default function Home() {
                 <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
               </div>
             ))}
+          </div>
+
+          <div className="mt-10 rounded-blob bg-sand p-6 reveal">
+            <h3 className="font-display text-lg font-semibold text-ink">
+              Atölyeler ve etkinlikler
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              Duyusal ve eğitici oyunun yanında; zekâ, bellek ve dikkat
+              gelişimini destekleyen hafta içi ve hafta sonu atölyeleri
+              düzenliyoruz.
+            </p>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {[
+                "Duyusal oyun",
+                "Yoga",
+                "Drama",
+                "Resim atölyesi",
+                "Robotik kodlama",
+                "İngilizce oyun grubu",
+                "Hafta sonu etkinlikleri",
+              ].map((w) => (
+                <li
+                  key={w}
+                  className="rounded-full bg-cream px-4 py-1.5 text-sm font-medium text-ink ring-1 ring-ink/5"
+                >
+                  {w}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="mt-8">
@@ -177,8 +211,9 @@ export default function Home() {
               </h2>
               <p className="mt-3 text-muted">
                 Erdemli, Mersin merkezliyiz; çevredeki yaklaşık 40 km&apos;lik
-                bölgedeki ailelere 0–3 yaş erken çocukluk gelişimi ve aile
-                danışmanlığı sunuyoruz.
+                bölgedeki ailelere 0–3 yaş erken çocukluk gelişimi, aile
+                danışmanlığı, gelişimsel değerlendirme ve çocuk atölyeleri
+                sunuyoruz.
               </p>
               <ul className="mt-6 flex flex-wrap gap-2">
                 {SERVICE_AREAS.map((area) => (

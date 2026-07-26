@@ -4,6 +4,29 @@ Target: **Erdemli, Mersin, Türkiye** + towns within ~40 km. Audience searches i
 Turkish (e.g. "Erdemli çocuk gelişim", "0-3 yaş gelişim Erdemli", "bebek gelişim
 merkezi Mersin", "Erdemli aile danışma merkezi").
 
+## Target keywords → where they live on-site
+
+Google ranks what's visibly on the page, so every keyword is woven into real
+content (not just the `keywords` meta tag, which Google ignores):
+
+| Keyword theme | Where |
+| --- | --- |
+| aile danışmanlık merkezi | root title/description, `legalName`, services page (Aile ve ebeveyn danışmanlığı) |
+| çocuk atölyesi / atölye | root title, services page "Atölyeler ve etkinlikler" section, home atölye strip |
+| duyusal oyun, eğitici oyun | service cards, home atölye strip, FAQ |
+| dikkat testi, gelişimsel değerlendirme | Gelişim takibi card, FAQ, JSON-LD offer catalog |
+| psikoloji, psikodrama | Aile ve ebeveyn danışmanlığı card, JSON-LD |
+| yoga, drama | Yoga ve drama atölyesi card, home strip |
+| robotik kodlama | Robotik kodlama card, home strip |
+| İngilizce oyun grubu | İngilizce oyun grubu card, home strip |
+| resim atölyesi | Resim atölyesi card, home strip |
+| hafta sonu etkinlik, grup etkinlik | Hafta sonu etkinlikleri card, FAQ |
+| zekâ, bellek, gelişim takip | Robotik kodlama + hafta sonu copy, Gelişim takibi card |
+| Mersin / Erdemli | everywhere above + `SERVICE_AREAS`, JSON-LD `areaServed` |
+
+All services are also emitted as a schema.org `OfferCatalog` (`OFFERINGS` in
+`src/lib/seo.ts`) on the `ChildCare` business node.
+
 ---
 
 ## 1. Fill in the real data (one file)
@@ -13,7 +36,7 @@ marked `TODO`. Empty fields are safely omitted — nothing fake is published —
 the storefront listing only ranks well once these are real:
 
 - [ ] `business.phone` — public phone, e.g. `"+90 324 000 00 00"`
-- [ ] `business.email` — real inbox (footer no longer hard-codes `hello@kidora.com`)
+- [x] `business.email` — `iletisim@kidoracocuk.com` (set in `seo.ts`; mailbox itself still needs to be created at your email provider)
 - [ ] `business.address.street` — street + building no
 - [ ] `business.address.postalCode` — Erdemli is `33730`
 - [ ] `business.geo` — exact `{ lat, lng }` map pin (from Google Maps → right-click → "What's here?")

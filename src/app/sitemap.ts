@@ -13,8 +13,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // While the maintenance gate is on there is nothing to index yet.
   if (process.env.MAINTENANCE_MODE === "on") return [];
 
+  // Build time ≈ last content change; the only lastmod signal a static site has.
+  const lastModified = new Date();
+
   return ROUTES.map(({ path, priority }) => ({
     url: absoluteUrl(path),
+    lastModified,
     changeFrequency: "monthly",
     priority,
   }));

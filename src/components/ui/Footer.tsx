@@ -21,8 +21,9 @@ export default function Footer() {
             className="h-20 w-auto"
           />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/70">
-            0–3 yaş arası minikler için erken gelişimi besliyoruz — çünkü ilk üç
-            yıl bir ömrü şekillendirir.
+            Erdemli, Mersin&apos;de aile danışma merkezi: 0–3 yaş erken gelişim
+            programları ve çocuk atölyeleriyle minikleri büyütüyoruz — çünkü ilk
+            üç yıl bir ömrü şekillendirir.
           </p>
         </div>
 

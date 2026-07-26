@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { absoluteUrl, ogBase } from "@/lib/seo";
+
+const DESCRIPTION =
+  "Erdemli, Mersin'de Kidora: 0–3 yaş programları, gelişimsel değerlendirme, dikkat testi, aile danışmanlığı; yoga, drama, robotik kodlama, İngilizce oyun grubu ve resim atölyesi.";
 
 export const metadata: Metadata = {
-  title: "Hizmetler",
-  description:
-    "Erdemli, Mersin'de Kidora'nın 0–3 yaş için oyun temelli programları: bebek bakımı, çocuk programları, gelişim takibi ve ebeveyn danışmanlığı.",
+  title: "Hizmetler ve Atölyeler",
+  description: DESCRIPTION,
   alternates: { canonical: "/services" },
+  openGraph: {
+    ...ogBase,
+    title: "Hizmetler ve Atölyeler · Kidora",
+    description: DESCRIPTION,
+    url: absoluteUrl("/services"),
+  },
 };
 
 const SERVICES = [
@@ -23,15 +32,48 @@ const SERVICES = [
   },
   {
     emoji: "📋",
-    title: "Gelişim takibi",
-    body: "Çocuğunuzun nasıl geliştiğini ve sırada ne olduğunu her zaman anlamanız için gelişim tarama araçlarıyla yapılan sakin, düzenli gelişim değerlendirmeleri.",
-    points: ["Gelişim takibi", "Erken destek", "Ebeveyn raporları"],
+    title: "Gelişim takibi ve değerlendirme",
+    body: "Çocuğunuzun nasıl geliştiğini ve sırada ne olduğunu her zaman anlamanız için gelişim tarama araçlarıyla yapılan sakin, düzenli gelişimsel değerlendirmeler ve dikkat testi.",
+    points: ["Gelişimsel değerlendirme", "Dikkat testi", "Ebeveyn raporları"],
   },
   {
     emoji: "👪",
-    title: "Ebeveyn danışmanlığı",
-    body: "Evde uygulayabileceğiniz, yargılamayan ve pratik rehberlik — uyku, beslenme, öfke nöbetleri ve oyun — ailenizin temposuna göre.",
-    points: ["Uyku rutinleri", "Beslenme rehberliği", "Evde oyun"],
+    title: "Aile ve ebeveyn danışmanlığı",
+    body: "Evde uygulayabileceğiniz, yargılamayan ve pratik rehberlik — uyku, beslenme, öfke nöbetleri ve oyun — ailenizin temposuna göre. Gerektiğinde psikoloji temelli aile danışmanlığı ve psikodrama çalışmalarıyla destekliyoruz.",
+    points: ["Uyku rutinleri", "Psikodrama", "Evde oyun"],
+  },
+];
+
+const WORKSHOPS = [
+  {
+    emoji: "🧘",
+    title: "Yoga ve drama atölyesi",
+    body: "Bedensel farkındalık, denge ve duygu ifadesi için çocuk yogası ile drama çalışmaları — hepsi oyunun içinde.",
+    points: ["Çocuk yogası", "Drama", "Duygu ifadesi"],
+  },
+  {
+    emoji: "🎨",
+    title: "Resim atölyesi",
+    body: "Boya, kâğıt ve hayal gücü: ince motor becerilerini ve yaratıcılığı besleyen serbest ve yönlendirilmiş sanat çalışmaları.",
+    points: ["Yaratıcılık", "İnce motor", "Duyusal oyun"],
+  },
+  {
+    emoji: "🤖",
+    title: "Robotik kodlama",
+    body: "Yaşa uygun yapı taşları ve basit robotik setlerle problem çözme, sıralama ve neden-sonuç ilişkisini keşfeden eğitici oyunlar.",
+    points: ["Eğitici oyun", "Problem çözme", "Zekâ & bellek"],
+  },
+  {
+    emoji: "🗣️",
+    title: "İngilizce oyun grubu",
+    body: "Şarkılar, tekerlemeler ve oyunlarla İngilizceyle erken ve doğal bir tanışma — ezber yok, keyifli tekrar var.",
+    points: ["Şarkı & oyun", "Erken dil", "Küçük grup"],
+  },
+  {
+    emoji: "🎪",
+    title: "Hafta sonu etkinlikleri",
+    body: "Hafta sonlarına özel grup etkinlikleri: zekâ, bellek ve dikkat gelişimini destekleyen oyunlar, aile katılımlı atölyeler.",
+    points: ["Grup etkinliği", "Aile katılımı", "Hafta sonu"],
   },
 ];
 
@@ -59,6 +101,41 @@ export default function ServicesPage() {
               <h2 className="mt-3 font-display text-2xl font-semibold text-ink">
                 {s.title}
               </h2>
+              <p className="mt-2 text-muted">{s.body}</p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {s.points.map((p) => (
+                  <li
+                    key={p}
+                    className="rounded-full bg-coral-soft px-3 py-1 text-sm font-semibold text-coral"
+                  >
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-20 max-w-2xl">
+          <span className="font-display text-sm font-bold uppercase tracking-widest text-teal">
+            Atölyeler ve etkinlikler
+          </span>
+          <h2 className="mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">
+            Oyunla öğrenen çocuklar için atölyeler
+          </h2>
+          <p className="mt-3 text-lg text-muted">
+            Duyusal ve eğitici oyunun yanında, hafta içi ve hafta sonu
+            atölyelerimizle çocuğunuzun merakını besliyoruz.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          {WORKSHOPS.map((s) => (
+            <div key={s.title} className="rounded-blob bg-sand p-7">
+              <div className="text-3xl">{s.emoji}</div>
+              <h3 className="mt-3 font-display text-2xl font-semibold text-ink">
+                {s.title}
+              </h3>
               <p className="mt-2 text-muted">{s.body}</p>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {s.points.map((p) => (
