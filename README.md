@@ -10,7 +10,6 @@ Built to grow into a full product: client login, client registry, and scheduling
 
 - **Next.js 16** (App Router, TypeScript) + **Tailwind CSS v4**
 - **GSAP ScrollTrigger** + **Lenis** — scroll-scrubbed animation & smooth scroll
-- **Cal.com** (`@calcom/embed-react`) — appointment booking
 - **Supabase** (`@supabase/ssr`) — scaffolded for future auth + registry
 
 ## Getting started
@@ -21,14 +20,13 @@ cp .env.local.example .env.local   # then fill in values (optional for first run
 npm run dev                        # http://localhost:3000
 ```
 
-All env vars are optional for the first run: with none set, online booking shows a
-placeholder and the walk-in lead form still works (logs server-side).
+All env vars are optional for the first run: with none set, the appointment
+request form still works (logs server-side).
 
 ## Environment
 
 See `.env.local.example`:
 
-- `NEXT_PUBLIC_CALCOM_LINK` — Cal.com link like `kidora/visit` (enables live booking)
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — for the future
   auth/registry phase
 
@@ -38,7 +36,7 @@ See `.env.local.example`:
 src/
   app/
     page.tsx                  # landing (hero -> Growth Journey -> services -> CTA)
-    schedule/page.tsx         # Cal.com booking + walk-in lead form
+    schedule/page.tsx         # appointment request form
     services/, about/         # info pages
     api/leads/route.ts        # walk-in lead capture
     (auth)/login              # SCAFFOLD - future client login
@@ -46,7 +44,7 @@ src/
   components/
     SmoothScroll.tsx          # Lenis <-> ScrollTrigger wiring
     growth-journey/           # GrowthJourney.tsx + CharacterStages.tsx (SVG)
-    ScheduleEmbed.tsx, LeadForm.tsx, ui/
+    LeadForm.tsx, ui/
   lib/supabase/               # client.ts / server.ts (scaffold)
 ```
 
