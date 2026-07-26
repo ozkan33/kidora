@@ -87,6 +87,15 @@ export default function LeadForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="@container grid gap-4">
+      {/* Honeypot — hidden from real users; bots that fill it are dropped server-side */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+      />
       <div className="grid gap-4 @md:grid-cols-2 @md:grid-rows-[auto_auto] @md:gap-y-2">
         <Field
           label="Adınız"
