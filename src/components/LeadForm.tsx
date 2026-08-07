@@ -46,8 +46,16 @@ export default function LeadForm() {
         body: JSON.stringify(data),
       });
       if (!res.ok) {
+        // Non-OK bodies aren't always ours: Vercel's firewall answers 429s
+        // with { error: { code, message } }, so only trust string errors.
         const j = await res.json().catch(() => ({}));
-        throw new Error(j.error || "Bir şeyler ters gitti. Lütfen tekrar deneyin.");
+        throw new Error(
+          typeof j.error === "string"
+            ? j.error
+            : res.status === 429
+              ? "Çok fazla deneme yapıldı. Lütfen biraz sonra tekrar deneyin."
+              : "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+        );
       }
       setStatus("ok");
       form.reset();
