@@ -34,6 +34,7 @@ export default function AddressLink({
   return (
     <a href={href} target="_blank" rel="noopener" className={className}>
       {children}
+      <span className="sr-only"> (yeni sekmede açılır)</span>
     </a>
   );
 }

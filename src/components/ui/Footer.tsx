@@ -11,6 +11,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-ink text-cream">
+      <h2 className="sr-only">Site bilgileri ve iletişim</h2>
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-2">
           <Image
@@ -18,6 +19,7 @@ export default function Footer() {
             alt="Kidora — Özel Aile Danışma Merkezi"
             width={1600}
             height={526}
+            sizes="244px"
             className="h-20 w-auto"
           />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-cream/70">
@@ -28,21 +30,22 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="text-sm font-bold uppercase tracking-wide text-cream/60">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-cream/60">
             Keşfet
-          </h4>
+          </h3>
           <ul className="mt-4 space-y-2 text-sm text-cream/80">
             <li><Link href="/#journey" className="hover:text-sky">Gelişim Yolculuğu</Link></li>
             <li><Link href="/services" className="hover:text-sky">Hizmetler</Link></li>
             <li><Link href="/about" className="hover:text-sky">Hakkımızda</Link></li>
+            <li><Link href="/sss" className="hover:text-sky">Sıkça sorulan sorular</Link></li>
             <li><Link href="/schedule" className="hover:text-sky">Randevu al</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-sm font-bold uppercase tracking-wide text-cream/60">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-cream/60">
             Bize ulaşın
-          </h4>
+          </h3>
           <ul className="mt-4 space-y-2 text-sm text-cream/80">
             <li>
               <AddressLink className="group inline-flex items-start gap-2 hover:text-sky">
@@ -62,7 +65,7 @@ export default function Footer() {
                 <span>
                   {address.street && <>{address.street}<br /></>}
                   {cityLine}
-                  <span className="mt-0.5 block text-xs text-cream/50 group-hover:text-sky">
+                  <span className="mt-0.5 block text-xs text-cream/70 group-hover:text-sky">
                     Yol tarifi al →
                   </span>
                 </span>
@@ -88,7 +91,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-cream/10">
-        <div className="mx-auto max-w-6xl px-5 py-5 text-xs text-cream/50">
+        <div className="mx-auto max-w-6xl px-5 py-5 text-xs text-cream/70">
           © {new Date().getFullYear()} Kidora. Tüm hakları saklıdır.
         </div>
       </div>

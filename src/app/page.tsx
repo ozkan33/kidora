@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GrowthJourney from "@/components/growth-journey/GrowthJourney";
-import { SERVICE_AREAS, LOCAL_FAQ, faqJsonLd } from "@/lib/seo";
+import { LOCAL_FAQ } from "@/lib/seo";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -43,6 +43,10 @@ const STATS = [
 export default function Home() {
   return (
     <>
+      {/* Poster is only referenced from CSS, so preload it — it's the hero's
+          first-paint backdrop (likely LCP). React hoists this into <head>. */}
+      <link rel="preload" as="image" href="/hero-poster.webp" />
+
       {/* ───────────── Interactive growth journey (landing hero) ───────────── */}
       <GrowthJourney />
 
@@ -64,11 +68,13 @@ export default function Home() {
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 reveal">
             {SERVICES.map((s) => (
-              <div
+              <Link
                 key={s.title}
+                href="/services"
                 className="group rounded-blob bg-sand p-6 transition-transform hover:-translate-y-1"
               >
                 <div
+                  aria-hidden
                   className="grid h-12 w-12 place-items-center rounded-2xl text-2xl"
                   style={{ backgroundColor: "color-mix(in srgb, " + s.accent + " 18%, white)" }}
                 >
@@ -78,7 +84,7 @@ export default function Home() {
                   {s.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -144,7 +150,7 @@ export default function Home() {
                 <div className="font-display text-3xl font-bold text-sky sm:text-4xl">
                   {s.value}
                 </div>
-                <div className="mt-1 text-xs text-cream/75">{s.label}</div>
+                <div className="mt-1 text-sm text-cream/75">{s.label}</div>
               </div>
             ))}
           </div>
@@ -185,7 +191,7 @@ export default function Home() {
               },
             ].map((p) => (
               <div key={p.title} className="rounded-blob bg-sand p-6">
-                <div className="text-3xl">{p.emoji}</div>
+                <div aria-hidden className="text-3xl">{p.emoji}</div>
                 <h3 className="mt-3 font-display text-lg font-semibold text-ink">
                   {p.title}
                 </h3>
@@ -210,21 +216,12 @@ export default function Home() {
                 Erdemli ve çevresindeki ailelerin yanındayız
               </h2>
               <p className="mt-3 text-muted">
-                Erdemli, Mersin merkezliyiz; çevredeki yaklaşık 40 km&apos;lik
-                bölgedeki ailelere 0–3 yaş erken çocukluk gelişimi, aile
-                danışmanlığı, gelişimsel değerlendirme ve çocuk atölyeleri
-                sunuyoruz.
+                Erdemli, Mersin merkezliyiz; Tömük, Kumkuyu, Limonlu,
+                Kızkalesi, Ayaş, Mezitli ve Mersin merkez dâhil çevremizdeki
+                yaklaşık 40 km&apos;lik bölgedeki ailelere 0–3 yaş erken çocukluk
+                gelişimi, aile danışmanlığı, gelişimsel değerlendirme ve çocuk
+                atölyeleri sunuyoruz.
               </p>
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {SERVICE_AREAS.map((area) => (
-                  <li
-                    key={area}
-                    className="rounded-full bg-cream px-4 py-1.5 text-sm font-medium text-ink ring-1 ring-ink/5"
-                  >
-                    {area}
-                  </li>
-                ))}
-              </ul>
             </div>
 
             <div>
@@ -241,17 +238,19 @@ export default function Home() {
                   </div>
                 ))}
               </dl>
+              <Link
+                href="/sss"
+                className="mt-4 inline-block font-bold text-coral hover:underline"
+              >
+                Tüm sıkça sorulan sorular →
+              </Link>
             </div>
           </div>
         </div>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd()) }}
-        />
       </section>
 
       {/* ───────────── Closing CTA ───────────── */}
-      <section className="bg-cream pb-24">
+      <section className="bg-cream pt-20 pb-24 sm:pt-24">
         <div className="mx-auto max-w-6xl px-5">
           <div className="relative overflow-hidden rounded-[2.5rem] bg-coral px-8 py-16 text-center text-cream sm:py-20 reveal">
             <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-cream/10" />

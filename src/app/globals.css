@@ -17,8 +17,8 @@
   --color-ink: #34405e;
   --color-muted: #5c6480;
 
-  --color-coral: #b85056;
-  --color-coral-soft: #f4d9d7;
+  --color-coral: #a8474d;
+  --color-coral-soft: #f8e3e1;
   --color-teal: #3b4765;
   --color-teal-soft: #e7eaf1;
   --color-sunny: #e7b59c;
@@ -37,6 +37,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Anchor targets land below the fixed nav (~96–112px tall) */
+  scroll-padding-top: 7.5rem;
 }
 
 body {
@@ -72,6 +74,15 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* The hero's server render is the animated 220vh pin branch (the reduced-
+     motion hook can't know the preference until hydration). Collapse it to one
+     viewport here so the post-hydration swap to the static poster hero doesn't
+     jump the layout. */
+  .hero-pin {
+    height: 100svh;
+    min-height: 34rem;
   }
 }
 

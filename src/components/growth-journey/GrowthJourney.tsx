@@ -8,10 +8,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const FRAME_COUNT = 96;
-const FRAME_W = 1280;
-const FRAME_H = 720;
+const FRAME_W = 1920;
+const FRAME_H = 1080;
 // Full-res frames for desktop; a downscaled set (~1/3 the bytes) for phones.
-const frameName = (i: number) => `frame_${String(i + 1).padStart(3, "0")}.jpg`;
+const frameName = (i: number) => `frame_${String(i + 1).padStart(3, "0")}.webp`;
 const frameSrc = (i: number, small: boolean) =>
   `/${small ? "frames-sm" : "frames"}/${frameName(i)}`;
 
@@ -58,7 +58,10 @@ function HeroCopy() {
           Hizmetlerimiz
         </Link>
       </div>
-      <p className="mt-10 animate-pulse text-sm font-semibold uppercase tracking-widest text-cream/70">
+      <p
+        className="mt-10 animate-pulse text-sm font-semibold uppercase tracking-widest text-cream/70"
+        style={{ animationIterationCount: 3 }}
+      >
         Aşağı kaydır ↓
       </p>
     </div>
@@ -76,6 +79,7 @@ export default function LandingHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const currentRef = useRef(-1);
 
   useEffect(() => {
@@ -118,11 +122,18 @@ export default function LandingHero() {
       if (w === canvas!.width && h === canvas!.height) return;
       canvas!.width = w;
       canvas!.height = h;
+      // Resizing resets context state; frames are 720p and large screens
+      // upscale them, so re-request the best resampler each time.
+      ctx!.imageSmoothingQuality = "high";
       paint(currentRef.current < 0 ? 0 : currentRef.current, true);
     }
 
+    // Fetch only the first frames up front so ~2MB of sequence doesn't compete
+    // with fonts/poster during first paint; the rest stream in after `load`.
+    // paint() tolerates not-yet-loaded frames, so a fast scroll never breaks.
+    const EAGER_FRAMES = 20;
     let loaded = 0;
-    for (let i = 0; i < FRAME_COUNT; i++) {
+    const loadFrame = (i: number) => {
       const img = new Image();
       img.src = frameSrc(i, small);
       img.onload = () => {
@@ -130,8 +141,14 @@ export default function LandingHero() {
         if (i === 0) paint(0, true);
         if (loaded === FRAME_COUNT) ScrollTrigger.refresh();
       };
-      images.push(img);
-    }
+      images[i] = img;
+    };
+    for (let i = 0; i < EAGER_FRAMES; i++) loadFrame(i);
+    const loadRest = () => {
+      for (let i = EAGER_FRAMES; i < FRAME_COUNT; i++) loadFrame(i);
+    };
+    if (document.readyState === "complete") loadRest();
+    else window.addEventListener("load", loadRest, { once: true });
 
     resize();
     window.addEventListener("resize", resize);
@@ -153,12 +170,19 @@ export default function LandingHero() {
           const o = Math.max(0, 1 - self.progress / 0.35);
           content.style.opacity = String(o);
           content.style.pointerEvents = o < 0.1 ? "none" : "auto";
+          // Once invisible, drop the copy from the tab order + AT tree too —
+          // pointer-events alone leaves the CTAs keyboard-focusable.
+          content.style.visibility = o < 0.1 ? "hidden" : "visible";
+          // The dark legibility grade only exists for the copy — fade it out
+          // with the copy so the frame plays fully lit.
+          if (overlayRef.current) overlayRef.current.style.opacity = String(o);
         }
       },
     });
 
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener("load", loadRest);
       st.kill();
     };
   }, [reduced]);
@@ -170,7 +194,7 @@ export default function LandingHero() {
         <div
           aria-hidden
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/hero-poster.jpg)" }}
+          style={{ backgroundImage: "url(/hero-poster.webp)" }}
         />
         <div className="pointer-events-none absolute inset-0 bg-black/35" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center [text-shadow:0_2px_22px_rgba(0,0,0,0.6)]">
@@ -183,31 +207,33 @@ export default function LandingHero() {
   return (
     // Section height = scroll distance the growth sequence plays over. Shorter on
     // mobile so the hero clears in fewer thumb-scrolls; full length on desktop.
-    <section ref={sectionRef} id="journey" className="relative h-[220vh] md:h-[300vh]">
-      <div className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
+    <section ref={sectionRef} id="journey" className="hero-pin relative h-[220vh] md:h-[300vh]">
+      <div className="sticky top-0 h-[100svh] min-h-[34rem] overflow-hidden bg-ink">
         {/* Blurred poster fills the letterbox so the contained frame has no hard bars */}
         <div
           aria-hidden
-          className="absolute inset-0 scale-110 bg-cover bg-center blur-2xl brightness-105 saturate-[1.1]"
-          style={{ backgroundImage: "url(/hero-poster.jpg)" }}
+          className="absolute inset-0 scale-105 bg-cover bg-center blur-md brightness-110 saturate-[1.1]"
+          style={{ backgroundImage: "url(/hero-poster.webp)" }}
         />
         {/* The scrubbed growth sequence — brightened + crisper for a well-lit, airy look */}
         <canvas
           ref={canvasRef}
           aria-hidden
           className="absolute inset-0 h-full w-full"
-          style={{ filter: "brightness(1.07) contrast(1.05) saturate(1.08)" }}
+          style={{ filter: "brightness(1.14) contrast(1.04) saturate(1.08)" }}
         />
 
-        {/* Legibility grade — darker behind the centred copy, airy at the edges */}
+        {/* Legibility grade — darker behind the centred copy, airy at the edges.
+            Fades out with the copy (see onUpdate) so it never dims the sequence. */}
         <div
+          ref={overlayRef}
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(85% 65% at 50% 46%, rgba(8,14,20,0.6) 0%, rgba(8,14,20,0.16) 55%, transparent 80%)",
+              "radial-gradient(85% 65% at 50% 46%, rgba(8,14,20,0.5) 0%, rgba(8,14,20,0.14) 55%, transparent 80%)",
           }}
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/35 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent" />
 
         {/* Hero copy — fades out as the growth sequence plays */}
         <div

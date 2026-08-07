@@ -58,7 +58,7 @@ The site is gated by `MAINTENANCE_MODE`. While it's `on`:
 ## 3. Verify the on-site work (after launch)
 
 - [ ] `https://www.kidoracocuk.com/robots.txt` → allows `/`, points to sitemap
-- [ ] `https://www.kidoracocuk.com/sitemap.xml` → lists `/`, `/services`, `/about`, `/schedule`
+- [ ] `https://www.kidoracocuk.com/sitemap.xml` → lists `/`, `/services`, `/about`, `/schedule`, `/sss`
 - [ ] Google [Rich Results Test](https://search.google.com/test/rich-results) on the
       home page → `ChildCare` + `FAQPage` detected with no errors
 - [ ] View source → one `application/ld+json` block with real address/phone/geo

@@ -32,7 +32,13 @@ export const business = {
     "Erdemli, Mersin'de aile danışma merkezi ve çocuk atölyesi: 0–3 yaş için oyun temelli erken çocukluk gelişimi, gelişimsel değerlendirme, dikkat testi ve duyusal oyun, yoga, drama, robotik kodlama, İngilizce oyun grubu, resim atölyeleri.",
 
   // ── Contact (TODO: replace placeholders with real values) ────────────────
-  /** TODO: real public phone in international format, e.g. "+90 324 000 00 00". */
+  /**
+   * TODO: no business phone line exists yet (2026-08). When one is set up,
+   * fill it in international format (e.g. "+90 324 000 00 00") — the footer,
+   * about page, and JSON-LD all render it automatically. Consider WhatsApp
+   * (social.whatsapp below) at the same time, and add a "prefer to call?"
+   * line on /schedule — the form is currently the only conversion path.
+   */
   phone: "",
   /** Public contact email (shown in footer, about page, and JSON-LD). */
   email: "iletisim@kidoracocuk.com",
@@ -126,9 +132,11 @@ export const ogBase = {
   locale: "tr_TR",
   images: [
     {
-      url: "/kidora-lockup-light.png",
-      width: 1600,
-      height: 536,
+      // Dedicated 1200×630 card (lockup on brand cream) — transparent PNGs
+      // render on black in WhatsApp/X dark mode and 3:1 gets cropped.
+      url: "/og.jpg",
+      width: 1200,
+      height: 630,
       alt: "Kidora — Aile Danışma Merkezi",
     },
   ],
@@ -213,7 +221,8 @@ export function organizationJsonLd() {
   };
 }
 
-/** Local FAQ — shown on the page and emitted as FAQPage JSON-LD. */
+/** Short local FAQ — shown on the home page (visible only; the FAQPage
+ * JSON-LD lives on /sss with the full list to avoid duplicate markup). */
 export const LOCAL_FAQ = [
   {
     q: "Kidora nerede?",
@@ -241,14 +250,117 @@ export const LOCAL_FAQ = [
   },
 ] as const;
 
-export function faqJsonLd() {
+export function faqJsonLd(faq: ReadonlyArray<{ q: string; a: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: LOCAL_FAQ.map(({ q, a }) => ({
+    mainEntity: faq.map(({ q, a }) => ({
       "@type": "Question",
       name: q,
       acceptedAnswer: { "@type": "Answer", text: a },
     })),
   };
 }
+
+/**
+ * Full site FAQ (Turkish), grouped by category. Rendered on /sss, where it is
+ * also emitted as FAQPage JSON-LD. Answers state only facts that appear
+ * elsewhere on the site — keep it that way (no prices, no staff names).
+ */
+export const SITE_FAQ: ReadonlyArray<{
+  category: string;
+  items: ReadonlyArray<{ q: string; a: string }>;
+}> = [
+  {
+    category: "Genel & Konum",
+    items: [
+      {
+        q: "Kidora nedir, ne yapıyorsunuz?",
+        a: "Kidora, Erdemli, Mersin'de bir aile danışma merkezi ve çocuk atölyesidir. 0–3 yaş için oyun temelli erken çocukluk programları, gelişimsel değerlendirme, dikkat testi ve aile danışmanlığının yanında yoga, drama, resim, robotik kodlama ve İngilizce oyun grubu gibi atölyeler sunuyoruz. Yeni açılıyoruz; ilk ailelerimizi sıcaklıkla ve bilime dayalı bir yaklaşımla karşılamaya hazırlanıyoruz.",
+      },
+      {
+        q: "Adresiniz nerede, hangi saatlerde açıksınız?",
+        a: "Adresimiz Akdeniz Mah., Yunus Emre Cad. No:6, Erdemli, Mersin — Erdemli'nin tam kalbindeyiz. Pazartesi'den Cumartesi'ye 09:00–18:00 arası açığız; Pazar günleri kapalıyız. Hakkımızda sayfamızdaki haritadan kolayca yol tarifi alabilirsiniz.",
+      },
+      {
+        q: "Erdemli dışında oturuyoruz, yine de gelebilir miyiz?",
+        a: "Tabii ki, kapımız çevre bölgelerdeki tüm ailelere açık. Erdemli merkez dışında Tömük, Kumkuyu, Limonlu, Kızkalesi, Ayaş, Çeşmeli, Arpaçbağları, Kocahasanlı, Mezitli ve Mersin merkez dâhil yaklaşık 40 km'lik bir bölgeye hizmet veriyoruz.",
+      },
+      {
+        q: "Hangi yaş grubuyla çalışıyorsunuz?",
+        a: "Uzmanlık alanımız 0–3 yaş, yani bir çocuğun beyninin en hızlı geliştiği ilk 1.000 gün. Bebekler için 0–12 ay bebek bakımı programımız, yürümeye başlayan minikler için 1–3 yaş çocuk programlarımız var. Ayrıca ebeveynler için aile danışmanlığı sunuyoruz; yani sadece çocuğunuzla değil, sizinle de çalışıyoruz.",
+      },
+    ],
+  },
+  {
+    category: "Programlar ve Atölyeler",
+    items: [
+      {
+        q: "Hangi programlarınız var?",
+        a: "Dört temel programımız var: 0–12 ay bebek bakımı (güvenli bağlanma, duyusal ve motor oyun, beslenme-uyku desteği), 1–3 yaş çocuk programları (dil, motor koordinasyon ve sosyal oyun), gelişim takibi ve gelişimsel değerlendirme, bir de ebeveyn ve aile danışmanlığı. Hepsi oyun temelli ve güncel erken çocukluk araştırmalarına dayanıyor.",
+      },
+      {
+        q: "Atölyelerinizde neler yapılıyor?",
+        a: "Duyusal oyun ve eğitici oyun gruplarının yanında çocuk yogası, drama, resim atölyesi, robotik kodlama ve İngilizce oyun grubu düzenliyoruz. Örneğin resim atölyesinde ince motor becerileri ve yaratıcılık, robotik kodlamada yaşa uygun setlerle problem çözme ve neden-sonuç ilişkisi, İngilizce oyun grubunda ise şarkılar ve tekerlemelerle dille doğal bir tanışma var — ezber yok, keyifli tekrar var.",
+      },
+      {
+        q: "Hafta sonu etkinlikleriniz neler?",
+        a: "Hafta sonlarına özel grup etkinlikleri düzenliyoruz: zekâ, bellek ve dikkat gelişimini destekleyen oyunlar ve aile katılımlı atölyeler. Böylece hafta içi vakti kısıtlı olan aileler de çocuklarıyla birlikte katılabiliyor. Cumartesi günleri 09:00–18:00 arası açık olduğumuzu hatırlatalım.",
+      },
+      {
+        q: "İkimiz de çalışıyoruz; programlar bize uyar mı?",
+        a: "Birçok aile gibi sizin de programınızın yoğun olabileceğini biliyoruz. Cumartesi dâhil haftanın altı günü 09:00–18:00 arası açığız ve hafta sonu grup etkinliklerimiz özellikle çalışan ebeveynler için güzel bir seçenek. Randevu talebinizde size uygun zamanı belirtin, ailenizin temposuna uyan bir saati birlikte bulalım.",
+      },
+      {
+        q: "Gruplarınız kalabalık mı?",
+        a: "Hayır — bilerek küçük gruplarla ilerliyoruz. İlkemiz az çocuk, çok ilgi: her çocuğu yakından tanımak ve her aileyi gerçekten dinlemek istiyoruz. Böylece atölyelerde ve programlarda çocuğunuz kalabalıkta kaybolmuyor, ihtiyacı olan ilgiyi görüyor.",
+      },
+    ],
+  },
+  {
+    category: "Randevu ve Ziyaret",
+    items: [
+      {
+        q: "Randevu nasıl alınır?",
+        a: "Çok basit: sitemizin randevu sayfasındaki forma bilgilerinizi ve tercih ettiğiniz zamanı bırakıyorsunuz, ekibimiz ziyaret saatinizi onaylamak için en kısa sürede sizinle iletişime geçiyor. Sorularınız için iletisim@kidoracocuk.com adresinden de bize yazabilirsiniz.",
+      },
+      {
+        q: "Randevusuz uğrayabilir miyiz?",
+        a: "Elbette — kapımız ailelere açık. Pazartesi–Cumartesi 09:00–18:00 arasında Kidora'ya uğrayıp bizi yerinde tanıyabilirsiniz. Yine de çocuğunuza yeterince zaman ayırabilmemiz için ilk görüşmede randevu sayfamızdan zaman ayırtmanızı öneririz.",
+      },
+      {
+        q: "İlk ziyarette bizi ne bekliyor?",
+        a: "İlk ziyaret bir tanışma görüşmesidir: sizi dinler, çocuğunuzun bulunduğu gelişim aşamasını ve ihtiyaçlarını birlikte konuşuruz. Hangi programın ya da atölyenin uygun olduğuna hiçbir baskı olmadan birlikte karar veririz. Amacımız ilk günden itibaren ailenizle bir ortaklık kurmak.",
+      },
+      {
+        q: "Çocuğumla birlikte içeride kalabilir miyim?",
+        a: "Kidora'da ebeveynler sürecin dışında değil, tam ortasındadır — ilkemiz ebeveynlerin yerine değil, onlarla birlikte çalışmak. Hafta sonu etkinliklerimizin bir kısmı zaten aile katılımlıdır. Hangi seanslarda çocuğunuza eşlik edeceğinizi ilk görüşmede, çocuğunuzun yaşına ve programına göre birlikte planlarız.",
+      },
+      {
+        q: "Ücretleriniz nedir?",
+        a: "Ücretler seçtiğiniz programa ve atölyeye göre değişiyor. Güncel bilgi için randevu sayfamızdan talep bırakabilir ya da iletisim@kidoracocuk.com adresinden bize ulaşabilirsiniz; ekibimiz size dönüş yaparak tüm detayları paylaşır. İlk tanışma görüşmesinde de programları ve koşulları birlikte konuşuruz.",
+      },
+    ],
+  },
+  {
+    category: "Değerlendirme ve Danışmanlık",
+    items: [
+      {
+        q: "Gelişimsel değerlendirme nedir, nasıl yapılır?",
+        a: "Gelişimsel değerlendirme, çocuğunuzun dil, motor ve sosyal gelişiminin hangi aşamada olduğunu gelişim tarama araçlarıyla anlamamızı sağlayan sakin bir çalışmadır. Çocuğunuz için bir sınav gibi değil, oyun gibi geçer. Sonunda çocuğunuzun nerede olduğunu ve sırada hangi adımın beklendiğini açık ve anlaşılır şekilde sizinle paylaşırız.",
+      },
+      {
+        q: "Dikkat testi yaptırabilir miyiz? Ne işe yarar?",
+        a: "Evet, Kidora'da dikkat testi uyguluyoruz. Test, çocuğunuzun dikkat becerileri hakkında somut bir resim sunar ve zekâ, bellek ve dikkat gelişimini destekleyen etkinliklerimizi ona göre yönlendirmemize yardımcı olur. Sonuçları anlaşılır bir rapor hâlinde sizinle konuşarak paylaşırız.",
+      },
+      {
+        q: "Çocuğumun gelişimini nasıl takip ediyor, bize nasıl bildiriyorsunuz?",
+        a: "Şeffaf gelişim takibi verdiğimiz sözlerden biri: değerlendirmeleri tek seferlik değil, düzenli aralıklarla yapıyoruz. Her değerlendirmenin ardından anlaşılır ebeveyn raporlarıyla çocuğunuzun nasıl geliştiğini ve bundan sonra neler beklendiğini net biçimde öğreniyorsunuz. Böylece hiçbir zaman \"acaba yolunda mı gidiyor?\" belirsizliğinde kalmıyorsunuz.",
+      },
+      {
+        q: "Aile danışmanlığı hangi konuları kapsıyor?",
+        a: "Uyku rutinleri, beslenme, öfke nöbetleri ve evde oyun gibi günlük hayatın gerçek konularında, yargılamayan ve evde hemen uygulayabileceğiniz pratik rehberlik sunuyoruz. Gerektiğinde psikoloji temelli aile danışmanlığı ve psikodrama çalışmalarıyla süreci destekliyoruz. Her şey ailenizin kendi temposuna göre ilerler.",
+      },
+    ],
+  },
+];

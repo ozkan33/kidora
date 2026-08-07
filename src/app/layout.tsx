@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/ui/Nav";
 import Footer from "@/components/ui/Footer";
@@ -76,8 +77,15 @@ export default function RootLayout({
           <main>{children}</main>
         ) : (
           <SmoothScroll>
+            {/* Keyboard users can bypass the fixed nav (WCAG 2.4.1) */}
+            <a
+              href="#main"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-coral focus:px-5 focus:py-2.5 focus:font-bold focus:text-cream"
+            >
+              İçeriğe atla
+            </a>
             <Nav />
-            <main>{children}</main>
+            <main id="main">{children}</main>
             <Footer />
             {/* Local-business + WebSite structured data (Erdemli, Mersin) */}
             <script
@@ -88,6 +96,7 @@ export default function RootLayout({
             />
           </SmoothScroll>
         )}
+        <Analytics />
       </body>
     </html>
   );

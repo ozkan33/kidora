@@ -103,6 +103,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     } catch (err) {
       // Delivery failed — keep the lead in server logs so it isn't lost.
+      // TODO: the user still sees success here, but nobody is alerted — wire a
+      // second channel (error monitoring or a fallback notification) so a
+      // failed send doesn't silently strand the lead in serverless logs.
       console.error("[kidora] lead email failed:", err);
       console.log("[kidora] new walk-in lead:", lead);
       return NextResponse.json({ ok: true });

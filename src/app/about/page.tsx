@@ -64,7 +64,7 @@ export default function AboutPage() {
           <div className="relative mx-auto aspect-square w-full max-w-md">
             <div className="absolute inset-0 rounded-[48%_52%_55%_45%/52%_48%_52%_48%] bg-teal-soft" />
             <div className="absolute inset-10 rounded-[40%_60%_55%_45%/55%_45%_55%_45%] bg-sunny/30" />
-            <div className="absolute inset-0 grid place-items-center text-7xl">
+            <div aria-hidden className="absolute inset-0 grid place-items-center text-7xl">
               🌱
             </div>
           </div>

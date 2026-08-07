@@ -97,7 +97,7 @@ export default function ServicesPage() {
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {SERVICES.map((s) => (
             <div key={s.title} className="rounded-blob bg-sand p-7">
-              <div className="text-3xl">{s.emoji}</div>
+              <div aria-hidden className="text-3xl">{s.emoji}</div>
               <h2 className="mt-3 font-display text-2xl font-semibold text-ink">
                 {s.title}
               </h2>
@@ -132,7 +132,7 @@ export default function ServicesPage() {
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {WORKSHOPS.map((s) => (
             <div key={s.title} className="rounded-blob bg-sand p-7">
-              <div className="text-3xl">{s.emoji}</div>
+              <div aria-hidden className="text-3xl">{s.emoji}</div>
               <h3 className="mt-3 font-display text-2xl font-semibold text-ink">
                 {s.title}
               </h3>

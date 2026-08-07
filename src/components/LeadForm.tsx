@@ -26,8 +26,7 @@ export default function LeadForm() {
     const errs: FieldErrors = {};
     if (!data.name?.trim()) errs.name = "Adınızı girin.";
     if (!data.phone?.trim()) errs.phone = "Telefon numaranızı girin.";
-    if (!data.email?.trim()) errs.email = "E-posta adresinizi girin.";
-    else if (!/.+@.+\..+/.test(data.email))
+    if (data.email?.trim() && !/.+@.+\..+/.test(data.email))
       errs.email = "Geçerli bir e-posta adresi girin.";
 
     setFieldErrors(errs);
@@ -72,8 +71,8 @@ export default function LeadForm() {
           Teşekkürler — talebinizi aldık!
         </h3>
         <p className="mt-2 text-muted">
-          Kidora ekibinden bir üye, ziyaret saatinizi onaylamak için
-          kısa süre içinde sizinle iletişime geçecek.
+          Ziyaret saatinizi birlikte planlamak için en kısa sürede sizi
+          arayacağız. Miniğinizle tanışmak için sabırsızlanıyoruz!
         </p>
         <button
           onClick={() => setStatus("idle")}
@@ -122,7 +121,7 @@ export default function LeadForm() {
         label="E-posta"
         name="email"
         type="email"
-        required
+        optional
         autoComplete="email"
         inputMode="email"
         placeholder="ornek@eposta.com"
