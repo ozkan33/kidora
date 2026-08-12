@@ -31,15 +31,11 @@ export const business = {
   description:
     "Erdemli, Mersin'de aile danışma merkezi ve çocuk atölyesi: 0–3 yaş için oyun temelli erken çocukluk gelişimi, gelişimsel değerlendirme, dikkat testi ve duyusal oyun, yoga, drama, robotik kodlama, İngilizce oyun grubu, resim atölyeleri.",
 
-  // ── Contact (TODO: replace placeholders with real values) ────────────────
-  /**
-   * TODO: no business phone line exists yet (2026-08). When one is set up,
-   * fill it in international format (e.g. "+90 324 000 00 00") — the footer,
-   * about page, and JSON-LD all render it automatically. Consider WhatsApp
-   * (social.whatsapp below) at the same time, and add a "prefer to call?"
-   * line on /schedule — the form is currently the only conversion path.
-   */
-  phone: "",
+  // ── Contact ──────────────────────────────────────────────────────────────
+  /** Display format (local — visitors are in Turkey, so no +90 prefix). */
+  phone: "0541 516 33 01",
+  /** E.164 format for tel: links and JSON-LD, so click-to-call works anywhere. */
+  phoneE164: "+905415163301",
   /** Public contact email (shown in footer, about page, and JSON-LD). */
   email: "iletisim@kidoracocuk.com",
 
@@ -181,7 +177,7 @@ export function organizationJsonLd() {
     },
   };
 
-  if (business.phone) childCare.telephone = business.phone;
+  if (business.phone) childCare.telephone = business.phoneE164;
   if (business.email) childCare.email = business.email;
   if (sameAs.length) childCare.sameAs = sameAs;
   if (business.mapUrl) childCare.hasMap = business.mapUrl;

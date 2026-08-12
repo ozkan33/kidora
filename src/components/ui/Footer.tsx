@@ -74,7 +74,7 @@ export default function Footer() {
             <li>Pzt–Cmt, 09:00–18:00</li>
             {phone && (
               <li>
-                <a href={`tel:${phone.replace(/\s+/g, "")}`} className="hover:text-sky">
+                <a href={`tel:${business.phoneE164}`} className="hover:text-sky">
                   {phone}
                 </a>
               </li>

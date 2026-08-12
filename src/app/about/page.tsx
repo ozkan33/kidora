@@ -132,7 +132,7 @@ export default function AboutPage() {
               {phone && (
                 <p className="mt-2">
                   <a
-                    href={`tel:${phone.replace(/\s+/g, "")}`}
+                    href={`tel:${business.phoneE164}`}
                     className="text-ink hover:text-coral"
                   >
                     {phone}

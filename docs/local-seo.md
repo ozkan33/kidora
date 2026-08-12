@@ -35,7 +35,7 @@ All on-site SEO reads from **`src/lib/seo.ts`**. Open it and replace every field
 marked `TODO`. Empty fields are safely omitted — nothing fake is published — but
 the storefront listing only ranks well once these are real:
 
-- [ ] `business.phone` — public phone, e.g. `"+90 324 000 00 00"`
+- [x] `business.phone` — public phone (0541 516 33 01, E.164 in `business.phoneE164`)
 - [x] `business.email` — `iletisim@kidoracocuk.com` (set in `seo.ts`; mailbox itself still needs to be created at your email provider)
 - [ ] `business.address.street` — street + building no
 - [ ] `business.address.postalCode` — Erdemli is `33730`
