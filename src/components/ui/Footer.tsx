@@ -4,7 +4,7 @@ import { business } from "@/lib/seo";
 import AddressLink from "./AddressLink";
 
 export default function Footer() {
-  const { address, phone, email } = business;
+  const { address, phone, email, social } = business;
   const cityLine = [address.locality, address.region]
     .filter(Boolean)
     .join(", ");
@@ -27,6 +27,31 @@ export default function Footer() {
             programları ve çocuk atölyeleriyle minikleri büyütüyoruz — çünkü ilk
             üç yıl bir ömrü şekillendirir.
           </p>
+          {social.instagram && (
+            <a
+              href={social.instagram}
+              target="_blank"
+              rel="noopener"
+              className="group mt-4 inline-flex min-h-11 items-center gap-2.5 text-sm text-cream/80 hover:text-sky"
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-5 w-5 shrink-0 text-cream/50 group-hover:text-sky"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+              Instagram&apos;da @kidoracocuk
+              <span className="sr-only"> (yeni sekmede açılır)</span>
+            </a>
+          )}
         </div>
 
         <div>

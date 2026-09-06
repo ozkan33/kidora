@@ -70,9 +70,9 @@ export const business = {
     },
   ],
 
-  /** TODO: social / profile URLs. Drop any you don't have. These become `sameAs`. */
+  /** Social / profile URLs. Drop any you don't have. These become `sameAs`. */
   social: {
-    instagram: "",
+    instagram: "https://www.instagram.com/kidoracocuk/",
     facebook: "",
     whatsapp: "", // e.g. "https://wa.me/90XXXXXXXXXX"
   },
