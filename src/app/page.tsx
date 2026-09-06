@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GrowthJourney from "@/components/growth-journey/GrowthJourney";
-import { LOCAL_FAQ } from "@/lib/seo";
+import AddressLink from "@/components/ui/AddressLink";
+import { LOCAL_FAQ, business } from "@/lib/seo";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -41,6 +42,12 @@ const STATS = [
 ];
 
 export default function Home() {
+  const { address, geo } = business;
+  const cityLine = [address.locality, address.region].filter(Boolean).join(", ");
+  const mapSrc = geo
+    ? `https://www.google.com/maps?q=${geo.lat},${geo.lng}&z=15&hl=tr&output=embed`
+    : null;
+
   return (
     <>
       {/* Poster is only referenced from CSS, so preload it — it's the hero's
@@ -222,6 +229,44 @@ export default function Home() {
                 gelişimi, aile danışmanlığı, gelişimsel değerlendirme ve çocuk
                 atölyeleri sunuyoruz.
               </p>
+
+              <div className="mt-8 overflow-hidden rounded-blob bg-cream">
+                {mapSrc && (
+                  <div className="aspect-[2/1]">
+                    <iframe
+                      src={mapSrc}
+                      title="Kidora konum haritası"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="h-full w-full border-0"
+                    />
+                  </div>
+                )}
+                <div className="p-5">
+                  <AddressLink className="group inline-flex items-start gap-2.5 text-ink hover:text-coral">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-muted group-hover:text-coral"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <span className="text-sm leading-relaxed">
+                      {address.street && <>{address.street}<br /></>}
+                      {cityLine}
+                      <span className="mt-1 block font-bold text-coral">
+                        Yol tarifi al →
+                      </span>
+                    </span>
+                  </AddressLink>
+                </div>
+              </div>
             </div>
 
             <div>
