@@ -96,7 +96,7 @@ export default function Footer() {
                 </span>
               </AddressLink>
             </li>
-            <li>Pzt–Cmt, 09:00–18:00</li>
+            <li>Pzt–Cmt, 10:00–18:00</li>
             {phone && (
               <li>
                 <a href={`tel:${business.phoneE164}`} className="hover:text-sky">

@@ -61,11 +61,11 @@ export const business = {
   /** Google Maps share link for the listing. */
   mapUrl: "https://maps.app.goo.gl/QJDUNZhAQYnM3zWf8",
 
-  /** Opening hours — matches the footer ("Pzt–Cmt, 09:00–18:00"). */
+  /** Opening hours — matches the footer ("Pzt–Cmt, 10:00–18:00"). */
   openingHours: [
     {
       days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      opens: "09:00",
+      opens: "10:00",
       closes: "18:00",
     },
   ],
@@ -242,7 +242,7 @@ export const LOCAL_FAQ = [
   },
   {
     q: "Randevu almam gerekiyor mu?",
-    a: "Dilerseniz randevu sayfamızdan size uygun bir saat seçebilir ya da çalışma saatlerimizde randevusuz uğrayabilirsiniz. Çalışma saatlerimiz Pazartesi–Cumartesi 09:00–18:00'dir.",
+    a: "Dilerseniz randevu sayfamızdan size uygun bir saat seçebilir ya da çalışma saatlerimizde randevusuz uğrayabilirsiniz. Çalışma saatlerimiz Pazartesi–Cumartesi 10:00–18:00'dir.",
   },
 ] as const;
 
@@ -276,7 +276,7 @@ export const SITE_FAQ: ReadonlyArray<{
       },
       {
         q: "Adresiniz nerede, hangi saatlerde açıksınız?",
-        a: "Adresimiz Akdeniz Mah., Yunus Emre Cad. No:6, Erdemli, Mersin — Erdemli'nin tam kalbindeyiz. Pazartesi'den Cumartesi'ye 09:00–18:00 arası açığız; Pazar günleri kapalıyız. Hakkımızda sayfamızdaki haritadan kolayca yol tarifi alabilirsiniz.",
+        a: "Adresimiz Akdeniz Mah., Yunus Emre Cad. No:6, Erdemli, Mersin — Erdemli'nin tam kalbindeyiz. Pazartesi'den Cumartesi'ye 10:00–18:00 arası açığız; Pazar günleri kapalıyız. Hakkımızda sayfamızdaki haritadan kolayca yol tarifi alabilirsiniz.",
       },
       {
         q: "Erdemli dışında oturuyoruz, yine de gelebilir miyiz?",
@@ -301,11 +301,11 @@ export const SITE_FAQ: ReadonlyArray<{
       },
       {
         q: "Hafta sonu etkinlikleriniz neler?",
-        a: "Hafta sonlarına özel grup etkinlikleri düzenliyoruz: zekâ, bellek ve dikkat gelişimini destekleyen oyunlar ve aile katılımlı atölyeler. Böylece hafta içi vakti kısıtlı olan aileler de çocuklarıyla birlikte katılabiliyor. Cumartesi günleri 09:00–18:00 arası açık olduğumuzu hatırlatalım.",
+        a: "Hafta sonlarına özel grup etkinlikleri düzenliyoruz: zekâ, bellek ve dikkat gelişimini destekleyen oyunlar ve aile katılımlı atölyeler. Böylece hafta içi vakti kısıtlı olan aileler de çocuklarıyla birlikte katılabiliyor. Cumartesi günleri 10:00–18:00 arası açık olduğumuzu hatırlatalım.",
       },
       {
         q: "İkimiz de çalışıyoruz; programlar bize uyar mı?",
-        a: "Birçok aile gibi sizin de programınızın yoğun olabileceğini biliyoruz. Cumartesi dâhil haftanın altı günü 09:00–18:00 arası açığız ve hafta sonu grup etkinliklerimiz özellikle çalışan ebeveynler için güzel bir seçenek. Randevu talebinizde size uygun zamanı belirtin, ailenizin temposuna uyan bir saati birlikte bulalım.",
+        a: "Birçok aile gibi sizin de programınızın yoğun olabileceğini biliyoruz. Cumartesi dâhil haftanın altı günü 10:00–18:00 arası açığız ve hafta sonu grup etkinliklerimiz özellikle çalışan ebeveynler için güzel bir seçenek. Randevu talebinizde size uygun zamanı belirtin, ailenizin temposuna uyan bir saati birlikte bulalım.",
       },
       {
         q: "Gruplarınız kalabalık mı?",
@@ -322,7 +322,7 @@ export const SITE_FAQ: ReadonlyArray<{
       },
       {
         q: "Randevusuz uğrayabilir miyiz?",
-        a: "Elbette — kapımız ailelere açık. Pazartesi–Cumartesi 09:00–18:00 arasında Kidora'ya uğrayıp bizi yerinde tanıyabilirsiniz. Yine de çocuğunuza yeterince zaman ayırabilmemiz için ilk görüşmede randevu sayfamızdan zaman ayırtmanızı öneririz.",
+        a: "Elbette — kapımız ailelere açık. Pazartesi–Cumartesi 10:00–18:00 arasında Kidora'ya uğrayıp bizi yerinde tanıyabilirsiniz. Yine de çocuğunuza yeterince zaman ayırabilmemiz için ilk görüşmede randevu sayfamızdan zaman ayırtmanızı öneririz.",
       },
       {
         q: "İlk ziyarette bizi ne bekliyor?",

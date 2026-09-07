@@ -127,7 +127,7 @@ export default function AboutPage() {
                 </span>
               </AddressLink>
 
-              <p className="mt-5 text-muted">Pzt–Cmt, 09:00–18:00</p>
+              <p className="mt-5 text-muted">Pzt–Cmt, 10:00–18:00</p>
 
               {phone && (
                 <p className="mt-2">
