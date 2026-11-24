@@ -120,6 +120,12 @@ html.lenis body {
 .kidora-runner .arm-a { transform-origin: 15px 10px; animation: kidora-run-armA 0.32s linear infinite; }
 .kidora-runner .arm-b { transform-origin: 15px 10px; animation: kidora-run-armB 0.32s linear infinite; }
 
+/* ── WhatsApp floating button: ring that expands and fades out ── */
+@keyframes kidora-wa-pulse {
+  from { opacity: 0.55; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.9); }
+}
+
 /* ── Focus: branded visible ring (outline follows radius; forced-colors safe) ── */
 :focus-visible {
   outline: 3px solid color-mix(in srgb, var(--color-coral) 65%, transparent);

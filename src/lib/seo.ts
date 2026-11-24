@@ -74,8 +74,19 @@ export const business = {
   social: {
     instagram: "https://www.instagram.com/kidoracocuk/",
     facebook: "",
-    whatsapp: "", // e.g. "https://wa.me/90XXXXXXXXXX"
+    /** Click-to-chat link — same number as `phoneE164`, digits only. */
+    whatsapp: "https://wa.me/905415163301",
   },
+};
+
+/**
+ * WhatsApp click-to-chat URL with an optional pre-filled first message.
+ * Returns "" when no WhatsApp number is configured, so callers can skip render.
+ */
+export const whatsappUrl = (text?: string) => {
+  const base = business.social.whatsapp;
+  if (!base) return "";
+  return text ? `${base}?text=${encodeURIComponent(text)}` : base;
 };
 
 /**

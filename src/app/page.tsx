@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import GrowthJourney from "@/components/growth-journey/GrowthJourney";
 import AddressLink from "@/components/ui/AddressLink";
+import WhatsAppFab, { WhatsAppInlineButton } from "@/components/ui/WhatsAppButton";
 import { LOCAL_FAQ, business } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -307,15 +308,21 @@ export default function Home() {
               Randevu alın ya da uğrayın — ailenize uygun bir zaman birlikte
               bulalım.
             </p>
-            <Link
-              href="/schedule"
-              className="relative mt-7 inline-block rounded-full bg-cream px-8 py-4 font-bold text-coral shadow-lg transition-transform hover:-translate-y-0.5"
-            >
-              Randevu oluştur
-            </Link>
+            <div className="relative mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+              <Link
+                href="/schedule"
+                className="rounded-full bg-cream px-8 py-4 font-bold text-coral shadow-lg transition-transform hover:-translate-y-0.5"
+              >
+                Randevu oluştur
+              </Link>
+              <WhatsAppInlineButton className="text-cream ring-2 ring-inset ring-cream/70 hover:bg-cream/10" />
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Floating WhatsApp chat button (landing page only) */}
+      <WhatsAppFab />
     </>
   );
 }
