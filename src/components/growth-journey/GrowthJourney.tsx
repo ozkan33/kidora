@@ -35,16 +35,16 @@ function HeroCopy() {
       <span className="inline-flex items-center gap-2 rounded-full bg-cream/15 px-4 py-1.5 text-sm font-bold text-cream ring-1 ring-cream/25 backdrop-blur-sm">
         Erken çocukluk gelişimi · 0–3 yaş
       </span>
-      <h1 className="mt-5 font-display text-4xl font-semibold leading-tight text-cream sm:text-6xl">
+      <h1 className="mt-5 font-display text-4xl font-semibold leading-tight text-cream sm:text-6xl short:text-3xl squat:mt-3">
         Büyümelerini,
         <br />
         <span className="text-sky">her adımda</span> izleyin.
       </h1>
-      <p className="mx-auto mt-5 max-w-md text-lg text-cream/85">
+      <p className="mx-auto mt-5 max-w-md text-lg text-cream/85 short:mt-3 short:text-base squat:hidden">
         İlk günlerden ilk koşulara — çocuğunuzun gelişimini oyun temelli ve
         uzman bir bakımla destekliyoruz.
       </p>
-      <div className="mt-8 flex flex-wrap justify-center gap-3">
+      <div className="mt-8 flex flex-wrap justify-center gap-3 short:mt-5 squat:mt-4">
         <Link
           href="/schedule"
           className="rounded-full bg-coral px-7 py-3.5 font-bold text-cream shadow-lg transition-transform hover:-translate-y-0.5"
@@ -59,7 +59,7 @@ function HeroCopy() {
         </Link>
       </div>
       <p
-        className="mt-10 animate-pulse text-sm font-semibold uppercase tracking-widest text-cream/70"
+        className="mt-10 animate-pulse text-sm font-semibold uppercase tracking-widest text-cream/70 short:hidden"
         style={{ animationIterationCount: 3 }}
       >
         Aşağı kaydır ↓
@@ -83,7 +83,10 @@ export default function LandingHero() {
   const currentRef = useRef(-1);
 
   useEffect(() => {
-    if (reduced) return;
+    // The first client render still has reduced=false (server snapshot), so ask
+    // the media query directly — otherwise reduced-motion users download every
+    // frame of a sequence they never see.
+    if (reduced || window.matchMedia(RM_QUERY).matches) return;
     const canvas = canvasRef.current;
     const section = sectionRef.current;
     if (!canvas || !section) return;
@@ -122,7 +125,7 @@ export default function LandingHero() {
       if (w === canvas!.width && h === canvas!.height) return;
       canvas!.width = w;
       canvas!.height = h;
-      // Resizing resets context state; frames are 720p and large screens
+      // Resizing resets context state; frames are 1080p and large screens
       // upscale them, so re-request the best resampler each time.
       ctx!.imageSmoothingQuality = "high";
       paint(currentRef.current < 0 ? 0 : currentRef.current, true);
@@ -184,6 +187,8 @@ export default function LandingHero() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("load", loadRest);
       st.kill();
+      // Cancel frame downloads still in flight.
+      for (const img of images) if (img && !img.complete) img.src = "";
     };
   }, [reduced]);
 
@@ -197,7 +202,7 @@ export default function LandingHero() {
           style={{ backgroundImage: "url(/hero-poster.webp)" }}
         />
         <div className="pointer-events-none absolute inset-0 bg-black/35" />
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center [text-shadow:0_2px_22px_rgba(0,0,0,0.6)]">
+        <div className="relative z-10 flex h-full flex-col items-center justify-center px-5 pt-24 text-center sm:pt-28 [text-shadow:0_2px_22px_rgba(0,0,0,0.6)]">
           <HeroCopy />
         </div>
       </section>
@@ -208,7 +213,7 @@ export default function LandingHero() {
     // Section height = scroll distance the growth sequence plays over. Shorter on
     // mobile so the hero clears in fewer thumb-scrolls; full length on desktop.
     <section ref={sectionRef} id="journey" className="hero-pin relative h-[220vh] md:h-[300vh]">
-      <div className="sticky top-0 h-[100svh] min-h-[34rem] overflow-hidden bg-ink">
+      <div className="sticky top-0 h-[100svh] min-h-[34rem] overflow-hidden bg-ink squat:min-h-0">
         {/* Blurred poster fills the letterbox so the contained frame has no hard bars */}
         <div
           aria-hidden
@@ -238,7 +243,7 @@ export default function LandingHero() {
         {/* Hero copy — fades out as the growth sequence plays */}
         <div
           ref={contentRef}
-          className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center [text-shadow:0_2px_22px_rgba(0,0,0,0.65)]"
+          className="relative z-10 flex h-full flex-col items-center justify-center px-5 pt-24 text-center sm:pt-28 [text-shadow:0_2px_22px_rgba(0,0,0,0.65)]"
         >
           <HeroCopy />
         </div>

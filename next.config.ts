@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   images: {
     // Next.js 16 requires explicitly allowing non-default quality values.
     // 90 keeps the full-bleed growth photos crisp.

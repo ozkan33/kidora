@@ -70,7 +70,7 @@ export const business = {
     },
   ],
 
-  /** Social / profile URLs. Drop any you don't have. These become `sameAs`. */
+  /** Social / profile URLs. Drop any you don't have. Profiles become `sameAs`. */
   social: {
     instagram: "https://www.instagram.com/kidoracocuk/",
     facebook: "",
@@ -152,8 +152,8 @@ export const ogBase = {
   ],
 };
 
-/** Non-empty social URLs, for JSON-LD `sameAs`. */
-const sameAs = Object.values(business.social).filter(Boolean);
+/** Non-empty profile URLs, for JSON-LD `sameAs` (the WhatsApp chat link is not a profile). */
+const sameAs = [business.social.instagram, business.social.facebook].filter(Boolean);
 
 /** Does the config have enough address detail to publish a postal address? */
 const hasAddress = Boolean(business.address.street);
@@ -236,7 +236,7 @@ export function organizationJsonLd() {
 export const LOCAL_FAQ = [
   {
     q: "Kidora nerede?",
-    a: "Erdemli, Mersin'deyiz. Erdemli ve çevresindeki yaklaşık 40 km'lik bölgedeki ailelere hizmet veriyoruz.",
+    a: "Akdeniz Mah., Yunus Emre Cad. No:6, Erdemli, Mersin adresindeyiz. Erdemli ve çevresindeki yaklaşık 40 km'lik bölgedeki ailelere hizmet veriyoruz.",
   },
   {
     q: "Hangi yaş aralığıyla ilgileniyorsunuz?",
@@ -286,7 +286,7 @@ export const SITE_FAQ: ReadonlyArray<{
     items: [
       {
         q: "Kidora nedir, ne yapıyorsunuz?",
-        a: "Kidora, Erdemli, Mersin'de bir aile danışma merkezi ve çocuk atölyesidir. 0–3 yaş için oyun temelli erken çocukluk programları, gelişimsel değerlendirme, dikkat testi ve aile danışmanlığının yanında yoga, drama, resim, robotik kodlama ve İngilizce oyun grubu gibi atölyeler sunuyoruz. Yeni açılıyoruz; ilk ailelerimizi sıcaklıkla ve bilime dayalı bir yaklaşımla karşılamaya hazırlanıyoruz.",
+        a: "Kidora, Erdemli, Mersin'de bir aile danışma merkezi ve çocuk atölyesidir. 0–3 yaş için oyun temelli erken çocukluk programları, gelişimsel değerlendirme, dikkat testi ve aile danışmanlığının yanında yoga, drama, resim, robotik kodlama ve İngilizce oyun grubu gibi atölyeler sunuyoruz. Kapımız açık; ailelerimizi sıcaklıkla ve bilime dayalı bir yaklaşımla karşılıyoruz.",
       },
       {
         q: "Adresiniz nerede, hangi saatlerde açıksınız?",

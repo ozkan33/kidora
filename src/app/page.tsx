@@ -149,7 +149,7 @@ export default function Home() {
               ve her gelişim basamağını sıcaklık ve uzmanlıkla destekliyoruz.
             </p>
           </div>
-          <div className="grid grid-cols-3 gap-4 reveal">
+          <div className="grid gap-4 sm:grid-cols-3 reveal">
             {STATS.map((s) => (
               <div
                 key={s.label}
@@ -173,11 +173,11 @@ export default function Home() {
               Sözümüz
             </span>
             <h2 className="mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">
-              Yeni açılıyoruz — ve işe sözümüzle başlıyoruz
+              Kapımız açık — ve işe sözümüzle başladık
             </h2>
             <p className="mt-3 text-muted">
-              Henüz ilk ailelerimizi karşılamaya hazırlanıyoruz. Şimdilik
-              elimizdeki tek şey, size verdiğimiz sözler.
+              Kidora&apos;da ailelerimizi ağırlamaya başladık. Yeni bir merkez
+              olarak size en başta üç söz veriyoruz.
             </p>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3 reveal">
@@ -313,7 +313,7 @@ export default function Home() {
                 href="/schedule"
                 className="rounded-full bg-cream px-8 py-4 font-bold text-coral shadow-lg transition-transform hover:-translate-y-0.5"
               >
-                Randevu oluştur
+                Randevu al
               </Link>
               <WhatsAppInlineButton className="text-cream ring-2 ring-inset ring-cream/70 hover:bg-cream/10" />
             </div>

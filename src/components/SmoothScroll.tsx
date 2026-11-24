@@ -42,5 +42,30 @@ export default function SmoothScroll({
     };
   }, []);
 
+  // On the home page, links to "/" or "/#journey" (logo, nav, footer) point at
+  // the URL we're already on, so after the first click the router has nothing
+  // to do and the link looks dead. Scroll to the top ourselves — in the capture
+  // phase, cancelling the click, so the router's own same-URL handling can't
+  // interrupt the smooth scroll.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element).closest?.("a");
+      if (!a || a.target === "_blank") return;
+      const url = new URL(a.href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+      if (window.location.pathname !== "/" || url.pathname !== "/") return;
+      if (url.hash && url.hash !== "#journey") return;
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
+
   return <>{children}</>;
 }
