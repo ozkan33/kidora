@@ -64,15 +64,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // While the maintenance gate is on, every route renders the "coming soon"
-  // page (see middleware.ts), so the nav/footer would only point at hidden
+  // page (see proxy.ts), so the nav/footer would only point at hidden
   // pages — drop the site chrome and render the page on its own.
   const maintenance = process.env.MAINTENANCE_MODE === "on";
 
   return (
-    <html lang="tr">
-      <body
-        className={`${fredoka.variable} ${nunito.variable} bg-cream text-ink antialiased`}
-      >
+    // Font variables live on <html>: Tailwind's @theme tokens resolve at :root,
+    // so on <body> they'd be undefined there and the brand fonts never apply.
+    // data-scroll-behavior: Next 16 only skips our CSS smooth scroll on route
+    // changes (instant scroll-to-top) when this attribute is present.
+    <html
+      lang="tr"
+      data-scroll-behavior="smooth"
+      className={`${fredoka.variable} ${nunito.variable}`}
+    >
+      <body className="bg-cream text-ink antialiased">
         {maintenance ? (
           <main>{children}</main>
         ) : (

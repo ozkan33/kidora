@@ -20,9 +20,10 @@ export function WhatsAppGlyph({ className }: { className?: string }) {
 /**
  * Floating "chat with us on WhatsApp" button, pinned bottom-right.
  *
- * - Phones: a 56px round button in the thumb zone, lifted above the iOS home
- *   indicator via the safe-area inset.
- * - sm and up: a pill with a two-line label.
+ * - Phones: a 56px round button in the thumb zone.
+ * - sm and up: a pill with a two-line label that collapses to the icon once
+ *   the page is scrolled (so it stops covering content) and re-expands on
+ *   hover/focus — see `.wa-label` in globals.css.
  *
  * Pure CSS (no client JS). Entrance + pulse are neutralised by the global
  * prefers-reduced-motion rule in globals.css.
@@ -36,8 +37,8 @@ export default function WhatsAppFab() {
       href={href}
       target="_blank"
       rel="noopener"
-      aria-label="WhatsApp'tan bize yazın (yeni sekmede açılır)"
-      className="group fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 flex animate-[kidora-rise_0.5s_cubic-bezier(0.2,0,0,1)_0.8s_both] items-center gap-3 rounded-full bg-white/95 p-1.5 shadow-[0_8px_30px_rgba(52,64,94,0.22)] ring-1 ring-ink/10 backdrop-blur-md transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_36px_rgba(52,64,94,0.28)] active:scale-95 sm:right-6 sm:bottom-6 sm:pr-5"
+      aria-label="WhatsApp'tan yazın (yeni sekmede açılır)"
+      className="group fixed right-4 bottom-4 z-40 flex animate-[kidora-rise_0.5s_cubic-bezier(0.2,0,0,1)_0.8s_both] items-center rounded-full bg-white/95 p-1.5 shadow-[0_8px_30px_rgba(52,64,94,0.22)] ring-1 ring-ink/10 backdrop-blur-md transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_36px_rgba(52,64,94,0.28)] active:scale-95 sm:right-6 sm:bottom-6"
     >
       <span className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#25d366] text-white">
         {/* Attention pulse: three rings after load, then it stays quiet */}
@@ -47,19 +48,24 @@ export default function WhatsAppFab() {
         />
         <WhatsAppGlyph className="relative h-6 w-6" />
       </span>
-      <span aria-hidden="true" className="hidden text-left leading-tight sm:block">
-        <span className="block text-xs font-semibold text-muted">
-          Bir mesaj uzağınızdayız
-        </span>
-        <span className="block font-display text-sm font-semibold text-ink">
-          WhatsApp&apos;tan yazın
+      <span
+        aria-hidden="true"
+        className="wa-label hidden overflow-hidden whitespace-nowrap text-left leading-tight sm:block squat:hidden"
+      >
+        <span className="block pr-3.5 pl-3">
+          <span className="block text-xs font-semibold text-muted">
+            Bir mesaj uzağınızdayız
+          </span>
+          <span className="block font-display text-sm font-semibold text-ink">
+            WhatsApp&apos;tan yazın
+          </span>
         </span>
       </span>
     </a>
   );
 }
 
-/** Inline WhatsApp CTA for use inside sections (e.g. next to "Randevu oluştur"). */
+/** Inline WhatsApp CTA for use inside sections (e.g. next to "Randevu al"). */
 export function WhatsAppInlineButton({ className = "" }: { className?: string }) {
   const href = whatsappUrl(GREETING);
   if (!href) return null;

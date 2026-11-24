@@ -8,7 +8,7 @@ import type { NextRequest } from "next/server";
  * extension) and Next internals are excluded via the matcher below, so the logo
  * and other public files still load on the maintenance page.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   if (process.env.MAINTENANCE_MODE !== "on") return NextResponse.next();
 
   if (request.nextUrl.pathname === "/maintenance") return NextResponse.next();

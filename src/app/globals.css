@@ -30,6 +30,11 @@
   --radius-blob: 2rem;
 }
 
+/* Height-based variants for the hero: `short:` = small phones in portrait,
+   `squat:` = phones in landscape, where the copy must fit below the fixed nav. */
+@custom-variant short (@media (max-height: 600px));
+@custom-variant squat (@media (max-height: 480px));
+
 :root {
   --background: var(--color-cream);
   --foreground: var(--color-ink);
@@ -126,10 +131,31 @@ html.lenis body {
   to   { opacity: 0; transform: scale(1.9); }
 }
 
-/* ── Focus: branded visible ring (outline follows radius; forced-colors safe) ── */
+/* From sm up the pill's label folds away as the page scrolls, leaving just the
+   icon; hover/focus brings it back. Progressive enhancement — without
+   scroll-driven animation support the label simply stays visible. */
+@keyframes kidora-wa-collapse {
+  to { max-width: 0; opacity: 0; }
+}
+@supports (animation-timeline: scroll()) {
+  .wa-label {
+    max-width: 14rem;
+    animation: kidora-wa-collapse linear both;
+    animation-timeline: scroll(root);
+    animation-range: 80px 320px;
+  }
+  a:hover > .wa-label,
+  a:focus-visible > .wa-label {
+    animation: none;
+  }
+}
+
+/* ── Focus: two-tone ring (ink outline + cream halo in the offset gap) so it
+   stays visible on cream, coral and ink surfaces alike; forced-colors safe ── */
 :focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--color-coral) 65%, transparent);
+  outline: 3px solid var(--color-ink);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-cream);
 }
 
 /* ── Entrance + scroll reveals (opacity + transform only) ── */
