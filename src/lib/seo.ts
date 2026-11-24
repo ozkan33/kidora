@@ -86,7 +86,10 @@ export const business = {
 export const whatsappUrl = (text?: string) => {
   const base = business.social.whatsapp;
   if (!base) return "";
-  return text ? `${base}?text=${encodeURIComponent(text)}` : base;
+  if (!text) return base;
+  // Not wa.me: its desktop redirect mangles emoji in `text` into "�".
+  const phone = base.replace("https://wa.me/", "");
+  return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
 };
 
 /**
